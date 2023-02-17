@@ -1,1 +1,5 @@
 TODO(Checkpoint Requirement 1 of 3): Add team member names and emails.
+
+Emmanuel Gonzalez <emmanuel_gonzalez@techexchange.in>
+Cesar Olague <czar_olag@techexchange.in>
+Elijah Okoroh <elijah_okoroh@techexchange.in>
