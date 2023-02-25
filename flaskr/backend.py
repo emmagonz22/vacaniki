@@ -12,12 +12,17 @@ class Backend:
         self.bucket_user_password = storage.bucket("user-passwords")
         
     def get_wiki_page(self, name):
+        
         pass
 
     def get_all_page_names(self):
-        pass
+        #List of content in blob (pages) 
+        content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
+        return content_blobs
+
 
     def upload(self):
+
         pass
 
     @app.route("/signup/", method=["POST"])
@@ -53,7 +58,7 @@ class Backend:
                     if user_signin.username == user.username and user_signin.hash_password == user.hash_password:
                         print("Successful sign in")
             else:
-                print(f"Wrong {username} or password")
+                raise Exception(f"Wrong {username} or password")
 
 
     def get_image(self):
@@ -61,3 +66,6 @@ class Backend:
 
 bk = Backend()
 print(f"Bucket {bk.bucket_content.name} tested")
+
+print(f"All pages: {bk.get_all_page_names}")
+
