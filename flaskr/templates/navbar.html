@@ -1,0 +1,27 @@
+<!DOCTYPE>
+<html>
+	<head>
+	</head>
+
+
+	<body>
+		<header> <!-- The navbar can be separated from the header -->
+			<nav>
+				<div>
+					<ul> <!--Add link to app.py and use jinja template to render links-->
+						<li> <a href="{{url_for("/home")}}"> Home</a>  </li>
+						<li> <a href="{{url_for("/pages")}}"> Pages </a> </li>
+						<li> <a href="{{url_for("/about")}}"> About </a> </li>
+						<li> <a href="{{url_for("/login")}}"> Login </a> </li>
+						<li> <a href="{{url_for("/signup")}}"> Sign up </li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+	</body>
+
+</html>
+
+
+
+
