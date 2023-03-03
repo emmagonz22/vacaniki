@@ -1,12 +1,12 @@
-from PIL import Image
+
 class User:
 
     def __init__(self, username: str, hash_password: str, 
                 email: str,
                 first_name: str = "", second_name: str = "", 
                 description:str ="",
-                profile_picture: Image = None,
-                author_picture: Image = None):
+                profile_picture: str = None,
+                author_picture: str = None):
         self.username: str = username
         self.email: str = email
         #Using the hashlin blake2b with prefix blake2b_<hash>

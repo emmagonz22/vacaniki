@@ -1,10 +1,9 @@
 
-from PIL import Image
 
 class Page:
 
-    def __init__(self, title: str, content, image: Image):
+    def __init__(self, title: str, content, image: str):
         self.title: str = title 
         self.content = content #Each element is a paragraph
-        self.image: Image = image
+        self.image: str = image
     
