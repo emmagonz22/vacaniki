@@ -23,8 +23,11 @@ def make_endpoints(app):
             password: str = request.form['password']
 
             # sends user and pass to backend to be verified/sent to bucket and signed in
-            backend.sign_up(username=username, password=password)
-            print('Signed up successfully!')
+            sign_up_event = backend.sign_up(username=username, password=password)
+            if sign_up_event:
+                print('Signed up successfully!')
+            else:
+                print('Account already exist!')
             return render_template('main.html')
         else:
             return 'Invalid method request'
@@ -33,6 +36,7 @@ def make_endpoints(app):
     @app.route('/login/', methods=['GET', 'POST'])
     def login():
         if request.method == "GET":
+            print("Rendering login template")
             return render_template('login.html')
         elif request.method == 'POST':
             username: str = request.form['username'].lower()

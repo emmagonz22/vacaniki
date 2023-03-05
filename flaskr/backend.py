@@ -1,7 +1,6 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
-from flaskr.user_model import User
 from flaskr.page_model import Page
 
 """Backend class for the `Vacapedia` platform
@@ -94,12 +93,15 @@ class Backend:
         new_user_blob = self.bucket_user_password.blob(username)
         salted_password = f"{username}_vacation2023_{password}"
         hash_password: str = hashlib.blake2b(salted_password.encode()).hexdigest()
-        user: User = User(username, hash_password)
-        if not self.bucket_user_password.blob(username):
+
+        if not new_user_blob.exists(self.storage_client):
+            print("Account doesn't exist")
             with new_user_blob.open("w") as new_user:
-                new_user.write(user)
+                new_user.write(hash_password)
+                return True
         else:
             print(f"User {username} already exist")
+            return False
 
 
     def sign_in(self, username, password):
@@ -121,8 +123,7 @@ class Backend:
         if self.bucket_user_password.blob(username):
             read_user_blob = self.bucket_user_password.blob(username)
             with read_user_blob.open("r") as user_signin:
-                print(user_signin.read())
-                if user_signin.username == username and user_signin.hash_password == hash_password:
+                if user_signin.read() == hash_password:
                     print("Successful sign in")
                     self.active_user = user_signin
         else:

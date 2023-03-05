@@ -15,7 +15,7 @@ Typical usage example:
 class User(UserMixin):
 
     def __init__(self, username: str, hash_password: str, 
-                email: str,
+                email: str = "",
                 first_name: str = "", second_name: str = "", 
                 description:str ="",
                 profile_picture: str = None):
