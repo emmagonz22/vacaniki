@@ -1,0 +1,58 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <h2>Upload File</h2>
+  <form class="upload-form" method="POST" action="/upload/">
+    <label for="wikipage">Vacation Spot:</label>
+    <input type="text" name="wikipage"><br>
+    <label for="file">File Upload:</label>
+    <input type="file" name="file"><br>
+    <input type="submit" value="Upload">
+  </form>
+{% endblock %}
+
+
+{% block styles %}
+  <style>
+    .upload-form {
+      max-width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.521);
+      box-shadow: 0 0 5px rgba(190, 182, 183, 0.89);
+    }
+    
+
+    label {
+        display: block;
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
+
+    input[type=file]
+    input[type=text] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.288);
+      box-sizing: border-box;
+    }
+    
+
+    input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}
