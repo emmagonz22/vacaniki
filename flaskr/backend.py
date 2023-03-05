@@ -56,7 +56,7 @@ class Backend:
         return page_list
 
     
-    def upload(self, content_name, content): #Add content to the content-bucket (a blob object)
+    def upload(self, content_name): #Add content to the content-bucket (a blob object)
         """Upload content to the GCS content bucket.
 
         Upload content to the GCS content bucket if the data already exist is going to overwrite the content.
@@ -64,14 +64,10 @@ class Backend:
         Args:
             content_name:
                 Name of the content that is going to be uploaded.
-            content:
-                Content that is going to be uploaded.
         
         """  
-
         new_page_blob = self.bucket_content.blob(content_name)
-        with new_page_blob.open("w") as f:
-            f.write(content)
+        new_page_blob.upload_from_filename(content_name)
 
 
     def sign_up(self, username: str, password: str):
@@ -140,10 +136,10 @@ class Backend:
         Returns:
             A image object? with the corresponding name of image_name
 
-        Raise:
-            ImageNotFound: 
-                Image not found in the cloud storage
         """  
-        read_blob = self.bucket_content.blob(image_name)
-        with read_blob.open("r") as image:
-            return image.read() 
+
+        content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
+        for blob in content_blobs:
+            if blob.name == image_name:
+                return blob
+        return "Image not Found" ## This can change to an raise Exception
