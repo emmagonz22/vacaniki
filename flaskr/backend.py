@@ -21,7 +21,6 @@ class Backend:
         self.storage_client = storage.Client()
         self.bucket_content = self.storage_client.bucket("wikiviewer-content")
         self.bucket_user_password = self.storage_client.bucket("user-passwords")
-        self.active_user: User = None
 
 
     def get_wiki_page(self, name):

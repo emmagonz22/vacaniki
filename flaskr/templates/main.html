@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-    <head>
-        <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
-        <title>Awesome wikipedia</title>
-    </head>
-</head>
 
-<body>
-    {% include 'navbar.html' %}
-    <!-- TODO(Project 1): Implement routes. -->
-    <div style="display: flex; justify-content:center; text-decoration: wavy; text-align: center;">       
-        <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
-        <h1>Welcome to the Awesome wikipedia</h1>
-    </div>
-</body>
+{% extends 'base.html' %}
 
-</html>
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet"  href="{{ url_for('static', filename='navbar.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+{% endblock head %}
+
+{% block navbar %}
+
+    <nav>
+        <div style="margin-right: 30px;">
+            <ul class="navbar"> <!--Add link to app.py and use jinja template to render links-->
+                <li> <a href="{{url_for('home')}}"> Home</a>  </li>
+                <li> <a href="{{url_for('home')}}"> Pages </a> </li>
+                <li> <a href="{{url_for('home')}}"> About </a> </li>
+                |
+
+                
+                <!-- Add User and | when log in-->
+                <li> <a href="{{url_for('login')}}"> Login </a> </li>
+                <li> <a href="{{url_for('sign_up')}}"> Sign up </a></li>
+            
+            </ul>
+        </div>
+    </nav>
+{% endblock navbar %}
+
