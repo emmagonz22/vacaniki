@@ -69,5 +69,5 @@ def make_endpoints(app):
             if file:
                 backend.upload(wikipage, file)
                 print('File uploaded successfully')
-                return render_template('main')
+                return render_template('main.html')
         return render_template('upload.html')
