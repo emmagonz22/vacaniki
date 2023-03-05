@@ -1,8 +1,8 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
-from user_model import User 
-from page_model import Page
+from flaskr.user_model import User
+from flaskr.page_model import Page
 
 """Backend class for the `Vacapedia` platform
 
