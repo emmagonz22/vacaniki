@@ -100,9 +100,8 @@ class Backend:
                 new_user.write(user)
         else:
             print(f"User {username} already exist")
-    """
 
-    """ 
+
     def sign_in(self, username, password):
         """Verify credential in the GCS's user-password bucket
 
