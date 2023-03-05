@@ -146,5 +146,4 @@ class Backend:
         """  
         read_blob = self.bucket_content.blob(image_name)
         with read_blob.open("r") as image:
-            return image.read()
-        
+            return image.read() 

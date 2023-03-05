@@ -1,6 +1,12 @@
 <!DOCTYPE>
 <html>
 	<head>
+
+    <link rel="stylesheet"  href="{{ url_for('static', filename='navbar.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
 	</head>
 
 
@@ -8,13 +14,17 @@
 		<header> <!-- The navbar can be separated from the header -->
 			<nav>
 				<div>
-					<ul> <!--Add link to app.py and use jinja template to render links-->
-						<li> <a href="{{url_for("/home")}}"> Home</a>  </li>
-						<li> <a href="{{url_for("/pages")}}"> Pages </a> </li>
-						<li> <a href="{{url_for("/about")}}"> About </a> </li>
-						<li> <a href="{{url_for("/login")}}"> Login </a> </li>
-						<li> <a href="{{url_for("/signup")}}"> Sign up </li>
-					</ul>
+					<ul class="navbar"> <!--Add link to app.py and use jinja template to render links-->
+						<li> <a href="{{url_for("home")}}"> Home</a>  </li>
+                        <li> <a href="{{url_for("home")}}"> Pages </a> </li>
+						<li> <a href="{{url_for("home")}}"> About </a> </li>
+						|
+                        
+                        <!-- Add User and | when log in-->
+                        <li> <a href="{{url_for("home")}}"> Login </a> </li>
+						<li> <a href="{{url_for("home")}}"> Sign up </li>
+                  
+                    </ul>
 				</div>
 			</nav>
 		</header>
