@@ -1,8 +1,10 @@
 from flaskr import pages
-
+from flaskr.user_model import User
+from flask_login import LoginManager
 from flask import Flask
+import logging, hashlib
 
-import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 # The flask terminal command inside "run-flask.sh" searches for
