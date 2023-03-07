@@ -1,58 +1,72 @@
 {% include 'main.html' %}
 
 {% block content %}
-  <h2>Log in</h2>
-  <form class="login-form" method="POST" action="/login/">
-    <label for="username">Username:</label>
-    <input type="text" name="username"><br>
-    <label for="password">Password:</label>
-    <input type="password" name="password"><br>
-    <input type="submit" value="Login">
-    <label><p>Don't have an account? <a href="{{url_for('sign_up')}}">Sign up</a></p>
-  </form>
+    <h2>Log in</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="login_status" role="alert">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <form class="login-form" method="POST" action="/login/">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+        <input type="submit" value="Login">
+        <label><p>Don't have an account? <a href="{{url_for('sign_up')}}">Sign up</a></p>
+    </form>
   
 {% endblock %}
 
 <!-- reference = https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics -->
 {% block styles %}
-  <style>
+    <style>
     .login-form {
-      max-width: 300px;
-      margin: 0 auto;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: rgba(255, 255, 255, 0.521);
-      box-shadow: 0 0 5px rgba(190, 182, 183, 0.89);
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.521);
+        box-shadow: 0 0 5px rgba(190, 182, 183, 0.89);
     }
 
     label {
-      display: block;
-      font-weight: normal;
-      margin-bottom: 5px;
+        display: block;
+        font-weight: normal;
+        margin-bottom: 5px;
     }
 
     input[type="text"],
     input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid rgba(0, 0, 0, 0.288);
-      box-sizing: border-box;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid rgba(0, 0, 0, 0.288);
+        box-sizing: border-box;
     }
 
     input[type="submit"] {
-      background-color: #1ccf34c4;
-      color: rgb(255, 255, 255);
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+        background-color: #1ccf34c4;
+        color: rgb(255, 255, 255);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
     input[type="submit"]:hover {
-      background-color: #0fb30f;
+        background-color: #0fb30f;
     }
-  </style>
+    </style>
 {% endblock %}
