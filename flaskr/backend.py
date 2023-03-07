@@ -1,8 +1,7 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
-from flaskr.page_model import Page
-
+from base64 import b64encode
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -52,7 +51,8 @@ class Backend:
         content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
         page_list = []
         for blob in content_blobs:
-            page_list.append(blob.name)
+            if blob.content_type == "text/html":
+                page_list.append(blob.name)
         return page_list
 
     
@@ -65,13 +65,11 @@ class Backend:
             content_name:
                 Name of the content that is going to be uploaded.
             content:
-                Content that is going to be uploaded.
+                File that is going to be uploaded (Images [png, jpeg, etc], html file, css file, etc)
         
         """  
-
         new_page_blob = self.bucket_content.blob(content_name)
-        with new_page_blob.open("w") as f:
-            f.write(content)
+        new_page_blob.upload_from_file(content)
 
 
     def sign_up(self, username: str, password: str):
@@ -118,32 +116,33 @@ class Backend:
         salted_password: str = f"{username}_vacation2023_{password}"
         #Hash saltes password wuth the blake2b hash function
         hash_password: str = hashlib.blake2b(salted_password.encode()).hexdigest() 
-        
-        if self.bucket_user_password.blob(username):
-            read_user_blob = self.bucket_user_password.blob(username)
-            with read_user_blob.open("r") as user_signin:
+        user_blob = self.bucket_user_password.blob(username)
+        if user_blob.exists(self.storage_client):
+            with user_blob.open("r") as user_signin:
                 if user_signin.read() == hash_password:
                     print("Successful sign in")
                     self.active_user = user_signin
         else:
             raise Exception(f"Wrong {username} or password")
 
-    def get_image(self, image_name: str):
+    def get_image(self, name: str):
         """Query image from the GCS's content bucket.
 
         Query image from the GCS's content bucket.
 
         Args:
-            image_name:
-                The image name 
+            name:
+                The image's blob name (not file name) 
 
         Returns:
-            A image object? with the corresponding name of image_name
+            A tuple with the corresponding image and content_type of the blob, if not found return Image not Found
 
-        Raise:
-            ImageNotFound: 
-                Image not found in the cloud storage
         """  
-        read_blob = self.bucket_content.blob(image_name)
-        with read_blob.open("r") as image:
-            return image.read() 
+
+    
+        image_blob = self.bucket_content.blob(name)
+
+        if image_blob.exists(self.storage_client):
+            #
+            return b64encode(image_blob.download_as_bytes()).decode("utf-8") ## Content type can be use for image format
+        return "Image not Found" ## This can change to an raise Exception
