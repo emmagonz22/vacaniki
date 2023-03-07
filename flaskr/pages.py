@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, url_for, flash, abort 
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from google.cloud import storage
 from flaskr.backend import Backend
@@ -26,6 +26,7 @@ def make_endpoints(app):
             # sends user and pass to backend to be verified/sent to bucket and signed in
             sign_up_event = backend.sign_up(username=username, password=password)
             if sign_up_event:
+            
                 user = User(username=username)
                 login_user(user)
                 print(User, 'USER INFO')
@@ -49,17 +50,22 @@ def make_endpoints(app):
             password: str = request.form['password']
 
             # sends user and pass to backend to be verified and logged in
-            sign_up_event = backend.sign_in(username=username, password=password)
-            if sign_up_event:
+            sign_in_event = backend.sign_in(username=username, password=password)
+            print("Signin USER: ", username)
+            if sign_in_event:
                 user = User(username=username)
                 login_user(user)
-                flash('Logged in successfully!')
-                return redirect(url_for('home'))
+
+                flash('Logged in successfully.')
+
+
+                return redirect(url_for("home"))
             else:
                 flash('Wrong username or password. Please Try Again.')
                 return redirect(url_for('login'))
         else: 
             return redirect(url_for('login'))
+            
 
     @login_required
     @app.route('/logout/', methods=['GET'])
@@ -87,3 +93,4 @@ def make_endpoints(app):
                 flash('File uploaded successfully')
                 return redirect(url_for('home'))
         return redirect(url_for('upload'))
+

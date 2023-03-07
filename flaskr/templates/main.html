@@ -19,11 +19,20 @@
                 <li> <a href="{{url_for('home')}}"> Pages </a> </li>
                 <li> <a href="{{url_for('home')}}"> About </a> </li>
                 |
-
                 
                 <!-- Add User and | when log in-->
+                {% if current_user.is_authenticated %}
+                {{ current_user.username }}
+                |
+                <li> <a href="{{url_for('upload')}}"> Upload </a> </li>
+                <li> <a href="{{url_for('logout')}}"> Log out </a></li>
+
+                {% else %}
+                
                 <li> <a href="{{url_for('login')}}"> Login </a> </li>
                 <li> <a href="{{url_for('sign_up')}}"> Sign up </a></li>
+
+                {% endif %}
             
             </ul>
         </div>

@@ -123,8 +123,8 @@ class Backend:
 
                 if user_signin.read() == hash_password:
                     return True
-        else:
-            return False
+        
+        return False
 
     def get_image(self, name: str):
         """Query image from the GCS's content bucket.
