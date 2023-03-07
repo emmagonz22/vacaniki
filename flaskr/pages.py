@@ -75,9 +75,11 @@ def make_endpoints(app):
         return redirect(url_for('home'))
 
     @login_required
-    @app.route('/upload/', methods=['GET','POST'])
+    @app.route('/upload/', methods=['GET', 'POST'])
     def upload():
-        if request.method == 'POST':
+        if request.method == 'GET':
+            return render_template('upload.html')
+        else:
             if 'file' not in request.files:
                 flash('No File Input')
                 return redirect(url_for('upload'))
@@ -92,5 +94,4 @@ def make_endpoints(app):
                 backend.upload(wikipage, file)
                 flash('File uploaded successfully')
                 return redirect(url_for('home'))
-        return redirect(url_for('upload'))
-
+                
