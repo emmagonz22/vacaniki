@@ -2,7 +2,7 @@
 
 {% block content %}
   <h2>Upload File</h2>
-  <form class="upload-form" method="POST" action="/upload/">
+  <form class="upload-form" method="POST" action="/upload/" enctype="multipart/form-data">
     <label for="wikipage">Vacation Spot:</label>
     <input type="text" name="wikipage"><br>
     <label for="file">File Upload:</label>
