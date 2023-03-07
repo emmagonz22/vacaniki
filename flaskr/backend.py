@@ -118,12 +118,13 @@ class Backend:
         hash_password: str = hashlib.blake2b(salted_password.encode()).hexdigest() 
         user_blob = self.bucket_user_password.blob(username)
         if user_blob.exists(self.storage_client):
+            
             with user_blob.open("r") as user_signin:
+
                 if user_signin.read() == hash_password:
-                    print("Successful sign in")
-                    self.active_user = user_signin
+                    return True
         else:
-            raise Exception(f"Wrong {username} or password")
+            return False
 
     def get_image(self, name: str):
         """Query image from the GCS's content bucket.
