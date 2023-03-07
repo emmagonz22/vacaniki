@@ -31,7 +31,7 @@ def make_endpoints(app):
                 print(User, 'USER INFO')
                 flash('Signed up successfully!')
                 flash(str(user))
-                return redirect(url_for('sign_up'))
+                return redirect(url_for('home'))
             else:
                 flash('Account already exist!')
                 return redirect(url_for('sign_up'))
