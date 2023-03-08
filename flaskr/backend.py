@@ -28,7 +28,7 @@ class Backend:
         Query the wiki page with specific name from the GCS's content bucket.
 
         Returns:
-            List with all the names
+            Wikipage with designated name.
 
         """  
         content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
