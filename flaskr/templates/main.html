@@ -18,9 +18,10 @@
                 <li> <a href="{{url_for('home')}}"> Home</a>  </li>
                 <li> <a href="{{url_for('home')}}"> Pages </a> </li>
                 <li> <a href="{{url_for('home')}}"> About </a> </li>
+       
                 |
-                
                 <!-- Add User and | when log in-->
+                <!-- Select navbar component if user is authenticated -->
                 {% if current_user.is_authenticated %}
                 {{ current_user.username }}
                 |
