@@ -58,8 +58,6 @@ def make_endpoints(app):
                 login_user(user)
 
                 flash('Logged in successfully.')
-
-
                 return redirect(url_for("home"))
             else:
                 flash('Wrong username or password. Please Try Again.')
@@ -74,6 +72,7 @@ def make_endpoints(app):
         '''logouts current user and redirects to home'''
         # using flask-login module, logouts user and redirects to home page
         logout_user()
+        flash('Logged out')
         return redirect(url_for('home'))
 
     @login_required
@@ -96,5 +95,5 @@ def make_endpoints(app):
             if file:
                 backend.upload(wikipage, file)
                 flash('File uploaded successfully')
-                return redirect(url_for('home'))
+                return redirect(url_for('upload'))
                 
