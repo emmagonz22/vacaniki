@@ -1,9 +1,11 @@
 from flaskr.backend import Backend
-from unittest.mock import MagicMock, patch, create_autospec, mock_open
+from unittest.mock import Mock, MagicMock, patch, create_autospec, mock_open
 import pytest
+from base64 import b64encode
+from io import BytesIO
 # TODO(Project 1): Write tests for Backend methods.
 
-#@patch("flaskr.backend.open", new_callable=mock_open, read_data="testpassword")
+
 def test_sign_in_success():
    
     mock_storage = MagicMock()
@@ -76,40 +78,68 @@ def test_get_wiki_failure():
 def test_get_all_page_names_success():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
-    class blob:
+    class mock_blob:
         def __init__(self, name, content_type):
             self.name = name
             self.content_type = content_type
-    mock_storage.list_blobs.return_value = [blob("wiki_test.html", "text/html"), blob("wiki_test_2.html", "text/html"), blob("style.css", "text/css")]
-    return ["wiki_test.html", "wiki_test_2.html"] == backend.get_all_page_names()
+    mock_storage.list_blobs.return_value = [mock_blob("wiki_test.html", "text/html"), mock_blob("wiki_test_2.html", "text/html"), mock_blob("style.css", "text/css")]
+    assert ["wiki_test.html", "wiki_test_2.html"] == backend.get_all_page_names()
 
 def test_get_all_page_names_empty():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
-    class blob:
+    class mock_blob:
         def __init__(self, name, content_type):
             self.name = name
             self.content_type = content_type
-    mock_storage.list_blobs.return_value = [blob("script1.js", "text/js"), blob("script2.js", "text/js"), blob("style.css", "text/css")]
-    return [] == backend.get_all_page_names()
+    mock_storage.list_blobs.return_value = [mock_blob("script1.js", "text/js"), mock_blob("script2.js", "text/js"), mock_blob("style.css", "text/css")]
+    assert [] == backend.get_all_page_names()
 
-"""
-@patch("flaskr.backend.storage.Client")
-def test_upload(client):
 
-    # assert bucket was called with the passed string
-    bucket = client().get_bucket
-    bucket.assert_called_with("wikiviewer-content")
+def test_upload():
+    mock_storage = MagicMock()
+    backend = Backend(mock_storage)
 
-    # assert blob and upload were called with expected params
-    blob = bucket().blob
-    blob.assert_called_with("report")
-    blob().upload_from_string.assert_called_with("")
-"""
-def get_image_success():
-    pass
 
-def get_image_failure():
+    bucket = backend.bucket_content
+    blob = bucket.blob("TestBlob")
+    blob.upload_from_file("content")
 
-    assert None
+    
+    assert blob.exists("TestBlob")
+    
 
+
+def test_get_image_failure():
+    storage_client = MagicMock() #storage
+    backend = Backend(storage_client) #backend 
+    blob_mock = MagicMock()
+    blob_mock.download_as_bytes.return_value = b"image_data"
+    blob_mock.exists.return_value = False
+    backend.bucket_content.blob.return_value = blob_mock
+
+    result = backend.get_image("failimage")
+
+    backend.bucket_content.blob.assert_called_once_with("failimage")
+    blob_mock.exists.assert_called_once_with(backend.storage_client)
+
+    assert result == "Image not found"
+def test_get_image_success():
+    # Mock the necessary objects
+    storage_client = MagicMock()
+    # Create the instance of the class to test
+    backend = Backend(storage_client)
+    blob_mock = MagicMock()
+    blob_mock.download_as_bytes.return_value = b"image_data"
+    blob_mock.exists.return_value = True
+    backend.bucket_content.blob.return_value = blob_mock
+
+    result = backend.get_image("test_image")
+
+    backend.bucket_content.blob.assert_called_once_with("test_image")
+    blob_mock.exists.assert_called_once_with(backend.storage_client)
+    blob_mock.download_as_bytes.assert_called_once()
+
+    # compare that the result is as expected
+    expected_result = b64encode(b"image_data").decode("utf-8")
+    assert result == expected_result

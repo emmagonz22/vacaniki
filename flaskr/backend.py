@@ -130,7 +130,7 @@ class Backend:
 
         return False
 
-    def get_image(self, name: str):
+    def get_image(self, name: str, encode_64=b64encode):
         """Query image from the GCS's content bucket.
 
         Query image from the GCS's content bucket.
@@ -148,6 +148,5 @@ class Backend:
         image_blob = self.bucket_content.blob(name)
 
         if image_blob.exists(self.storage_client):
-            #
-            return b64encode(image_blob.download_as_bytes()).decode("utf-8") ## Content type can be use for image format
-        return None ## This can change to an raise Exception
+            return encode_64(image_blob.download_as_bytes()).decode("utf-8") ## Content type can be use for image format
+        return "Image not found" ## This can change to an raise Exception
