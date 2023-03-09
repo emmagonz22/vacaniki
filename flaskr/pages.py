@@ -17,6 +17,7 @@ def make_endpoints(app):
     
     @app.route('/signup/', methods=['GET', 'POST'])
     def sign_up():
+        '''Returns signup page'''
         if request.method == 'GET':
             return render_template('signup.html')
         elif request.method == 'POST':
@@ -29,7 +30,6 @@ def make_endpoints(app):
             
                 user = User(username=username)
                 login_user(user)
-                print(User, 'USER INFO')
                 flash('Signed up successfully!')
                 flash(str(user))
                 return redirect(url_for('home'))
@@ -42,6 +42,7 @@ def make_endpoints(app):
    
     @app.route('/login/', methods=['GET', 'POST'])
     def login():
+        '''Returns login page'''
         if request.method == "GET":
             print("Rendering login template")
             return render_template('login.html')
@@ -57,8 +58,6 @@ def make_endpoints(app):
                 login_user(user)
 
                 flash('Logged in successfully.')
-
-
                 return redirect(url_for("home"))
             else:
                 flash('Wrong username or password. Please Try Again.')
@@ -70,13 +69,16 @@ def make_endpoints(app):
     @login_required
     @app.route('/logout/', methods=['GET'])
     def logout():
+        '''logouts current user and redirects to home'''
         # using flask-login module, logouts user and redirects to home page
         logout_user()
+        flash('Logged out')
         return redirect(url_for('home'))
 
     @login_required
     @app.route('/upload/', methods=['GET', 'POST'])
     def upload():
+        '''Returns upload page'''
         if request.method == 'GET':
             return render_template('upload.html')
         else:
@@ -93,5 +95,5 @@ def make_endpoints(app):
             if file:
                 backend.upload(wikipage, file)
                 flash('File uploaded successfully')
-                return redirect(url_for('home'))
+                return redirect(url_for('upload'))
                 

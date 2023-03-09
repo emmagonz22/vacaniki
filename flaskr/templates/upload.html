@@ -2,18 +2,6 @@
 
 {% block content %}
     <h2>Upload File</h2>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="upload_status" role="alert">
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-    {% endwith %}
     
         <form class="upload-form" method="POST" action="/upload/" enctype="multipart/form-data">
         <label for="wikipage">Name:</label>
