@@ -5,6 +5,7 @@
 {% block head %}
   {{ super() }}
   <link rel="stylesheet"  href="{{ url_for('static', filename='navbar.css') }}">
+  <link rel="stylesheet"  href="{{ url_for('static', filename='flash_styles.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
@@ -18,15 +19,38 @@
                 <li> <a href="{{url_for('home')}}"> Home</a>  </li>
                 <li> <a href="{{url_for('home')}}"> Pages </a> </li>
                 <li> <a href="{{url_for('home')}}"> About </a> </li>
+       
                 |
-
-                
                 <!-- Add User and | when log in-->
+                <!-- Select navbar component if user is authenticated -->
+                {% if current_user.is_authenticated %}
+                {{ current_user.username }}
+                |
+                <li> <a href="{{url_for('upload')}}"> Upload </a> </li>
+                <li> <a href="{{url_for('logout')}}"> Log out </a></li>
+
+                {% else %}
+                
                 <li> <a href="{{url_for('login')}}"> Login </a> </li>
                 <li> <a href="{{url_for('sign_up')}}"> Sign up </a></li>
+
+                {% endif %}
             
             </ul>
         </div>
     </nav>
 {% endblock navbar %}
 
+{% block flash_messages %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="status" role="alert">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock flash_messages %}

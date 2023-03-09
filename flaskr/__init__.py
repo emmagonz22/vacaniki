@@ -27,9 +27,8 @@ def create_app(test_config=None):
 
     # Define user_loader callback
     @login_manager.user_loader
-    def load_user(username):
+    def load_user(user_id):
     # Retrieve user
-        user_id = hashlib.blake2b(username.encode('utf-8')).hexdigest()
         return User.get(user_id)
 
 

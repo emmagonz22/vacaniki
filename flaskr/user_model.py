@@ -1,5 +1,4 @@
 from flask_login import UserMixin
-import hashlib
 
 """User model for the 
 
@@ -22,7 +21,7 @@ class User(UserMixin):
 
         #create a unique id using the username input to load user session
         self.username: str = username
-        self.id = hashlib.blake2b(username.encode('utf-8')).hexdigest()
+        self.id = username
 
         self.email: str = email
         self.first_name: str = first_name
@@ -32,8 +31,8 @@ class User(UserMixin):
 
     #returns User
     @staticmethod
-    def get(user_id):
-        return User(username=user_id)
+    def get(username):
+        return User(username=username)
 
     """
     Convert the User object to string with user basic information
