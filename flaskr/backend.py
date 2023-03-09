@@ -16,8 +16,8 @@ Typical usage example:
 """
 class Backend:
 
-    def __init__(self):
-        self.storage_client = storage.Client()
+    def __init__(self, storage_client=storage.Client() ):
+        self.storage_client = storage_client
         self.bucket_content = self.storage_client.bucket("wikiviewer-content")
         self.bucket_user_password = self.storage_client.bucket("user-passwords")
 
@@ -25,19 +25,22 @@ class Backend:
     def get_wiki_page(self, name):
         """Get wiki page with specific name
 
-        Query the wiki page with specific name from the GCS's content bucket.
+        Query the wiki page with specific name from the GCS's content bucket
+        and download it in the templates folder location with {name}.
 
         Returns:
-            List with all the names
+            Tuple with content (Wiki page blob, wiki page content type, file_path, name)
 
         """  
-        content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
-        wiki_page = None
-        for blob in content_blobs:
-            if blob.name == name:
-                wiki_page = blob
-                break
-        return wiki_page
+        wiki_blob = self.bucket_content.blob(name)
+
+        if wiki_blob.exists(self.storage_client):
+            
+            wiki_blob.download_to_filename("/templates/")
+            file_path = f"/templates/{name}"
+            return (wiki_blob, wiki_blob.content_type, file_path, name)
+
+        return None
 
     def get_all_page_names(self):#List of content in blob (pages) 
         """Query all the pages from the GCS's content bucket.
@@ -118,12 +121,13 @@ class Backend:
         hash_password: str = hashlib.blake2b(salted_password.encode()).hexdigest() 
         user_blob = self.bucket_user_password.blob(username)
         if user_blob.exists(self.storage_client):
-            
+        
             with user_blob.open("r") as user_signin:
-
+                
+                print(user_signin.read(), hash_password)
                 if user_signin.read() == hash_password:
                     return True
-        
+
         return False
 
     def get_image(self, name: str):
@@ -146,4 +150,4 @@ class Backend:
         if image_blob.exists(self.storage_client):
             #
             return b64encode(image_blob.download_as_bytes()).decode("utf-8") ## Content type can be use for image format
-        return "Image not Found" ## This can change to an raise Exception
+        return None ## This can change to an raise Exception
