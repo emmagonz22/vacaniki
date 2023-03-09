@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, flash, abort 
+from flask import Flask, redirect, render_template, request, url_for, flash, send_file
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from google.cloud import storage
 from flaskr.backend import Backend
@@ -12,9 +12,42 @@ def make_endpoints(app):
 
     @app.route("/")
     def home():
-        return render_template('main.html')
-
+        """Returns homepage."""
+        return render_template(
+            'main.html',
+            page_name="Vacationiki",
+            page_content="Vacationiki - One stop shop for the greatest vacation sites!",
+        )
     
+    @app.route("/about")
+    def about():
+        """Returns about page."""
+        return render_template('about.html')
+
+    @app.rounte("/images/<img>")
+    def images(img):
+        """Returns image from from `get_image()` method."""
+        return send_file(backend.get_image(img), mimetype='image/jpeg')
+
+    @app.route("/pages")
+    def all_pages():
+       """Returns all of the pages from `get_all_page_names()` method."""
+       return render_template(
+           "pages.html",
+           page_name="Vactionwiki Index",
+           all_pages=backend.get_all_page_names()
+       )
+    
+    @app.route("/pages/<name>")
+    def page(name):
+       """Returns the page from `get_wiki_page()` method."""
+       return render_template(
+           "main.html",
+           page_name=name,
+           page_content=backend.get_wiki_page(name)
+       )
+
+
     @app.route('/signup/', methods=['GET', 'POST'])
     def sign_up():
         '''Returns signup page'''

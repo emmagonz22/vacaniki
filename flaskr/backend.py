@@ -29,7 +29,7 @@ class Backend:
         and download it in the templates folder location with {name}.
 
         Returns:
-            Tuple with content (Wiki page blob, wiki page content type, file_path, name)
+            Wikipage with designated name.
 
         """  
         wiki_blob = self.bucket_content.blob(name)
