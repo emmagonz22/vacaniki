@@ -3,18 +3,6 @@
 {% block content %}
     <h2>Sign Up</h2>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="sign_up_status" role="alert">
-                <ul>
-                    {% for message in messages %}
-                      <li>{{ message }}</li>
-                  {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-    {% endwith %}
-
     <form class="signup-form" method="POST" action="/signup/">
         <label for="username">Username:</label>
         <input type="text" name="username" required><br>
