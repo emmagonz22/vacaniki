@@ -121,10 +121,8 @@ class Backend:
         hash_password: str = hashlib.blake2b(salted_password.encode()).hexdigest() 
         user_blob = self.bucket_user_password.blob(username)
         if user_blob.exists(self.storage_client):
-        
             with user_blob.open("r") as user_signin:
-                
-                print(user_signin.read(), hash_password)
+             
                 if user_signin.read() == hash_password:
                     return True
 
