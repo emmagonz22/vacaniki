@@ -1,0 +1,14 @@
+{% include 'main.html' %}
+
+{% block content %}
+<head>
+    <title>{{ page_name }}</title>
+</head>
+<body>
+    <ul>
+    {% for page in all_pages %}
+        <li><a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
+    {% endfor %}
+    </ul>
+</body>
+{% endblock %}
