@@ -24,7 +24,7 @@ def make_endpoints(app):
         """Returns about page."""
         return render_template('about.html')
 
-    @app.rounte("/images/<img>")
+    @app.route("/images/<img>")
     def images(img):
         """Returns image from from `get_image()` method."""
         return send_file(backend.get_image(img), mimetype='image/jpeg')

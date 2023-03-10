@@ -1,9 +1,5 @@
 {% include "main.html" %}
 
-{% block page_name %}
-About This Wiki
-{% endblock %}
-
 {% block content %}
 <h3>About this Wiki</h3>
 
@@ -12,6 +8,28 @@ About This Wiki
 <h3>Your Authors</h3>
 
 <!-- TODO(Project 1): Add team members and pictures to about page. -->
-
+<img src="team_image_url1.jpg" alt="Image of Team Member 1">
+<img src="team_image_url2.jpg" alt="Image of Team Member 2">
+<img src="team_image_url3.jpg" alt="Image of Team Member 3">
 {% endblock %}
 
+
+{% block style %}
+<style>
+img {
+    display: block;
+	margin: 0 auto;
+	border: 2px solid black;
+}
+
+h3 {
+    font-size: 32px;
+    color: rgb(108, 3, 117);
+}
+
+p {
+	font-size: 16px;
+	line-height: 1.5;
+}
+</style>
+{% endblock %}

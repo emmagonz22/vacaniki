@@ -5,20 +5,26 @@
     <head>
         <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
         {% block head %}
-        <title> {% block title %} Vacapedia {% endblock %}</title>
+        <title> {{page_name}}</title>
         {% endblock %}
        
     </head>
 </head>
 
+{% block style %}
+    <link rel="stylesheet"  href="{{ url_for('static', filename='base_styles.css') }}">
+{% endblock %}
+
 <body>
 
     <header class="header-content">{% block navbar %} {% endblock %} </header>
-    <!-- TODO(Project 1): Implement routes. -->
+
     <div style="display: flex; justify-content:center; text-decoration: wavy; text-align: center;">       
-        <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
-        <h1>Welcome to the Awesome wikipedia</h1>
+        <body>
+            <h1 class="base_h1"> {{ page_name }} </h1>
+        </body>
     </div>
+    <p class="base_p"> {{ page_content }} </p>
     {% block flash_messages %} {% endblock %}
 </body>
 
