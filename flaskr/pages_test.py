@@ -31,7 +31,7 @@ def test_all_pages(client):
    with patch("flaskr.backend.Backend.get_all_page_names", return_value=["Canada.txt", "California.txt"]):
        resp = client.get("/pages")
        assert resp.status_code == 200
-       assert b"Vactionwiki Pages" in resp.data
+       assert b"Vactionwiki Index" in resp.data
  
 @patch("flaskr.backend.Backend.get_wiki_page", return_value=b"test.")
 def test_get_page(mock_get_wiki_page, client):
