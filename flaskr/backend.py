@@ -29,16 +29,17 @@ class Backend:
         and download it in the templates folder location with {name}.
 
         Returns:
-            Tuple with content (Wiki page blob, wiki page content type, file_path, name)
+            Wikipage with designated name.
 
         """  
         wiki_blob = self.bucket_content.blob(name)
 
         if wiki_blob.exists(self.storage_client):
-            
-            wiki_blob.download_to_filename("/templates/")
-            file_path = f"/templates/{name}"
-            return (wiki_blob, wiki_blob.content_type, file_path, name)
+            with wiki_blob.open("r") as page:
+                return page.read()
+            #file_path = f"flaskr/templates/{name}"
+            #wiki_blob.download_to_filename(file_path)
+            #return (wiki_blob, wiki_blob.content_type, file_path, name)
 
         return None
 
