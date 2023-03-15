@@ -1,0 +1,20 @@
+.status {
+    color: #8836f4;
+    font-size: 14px;
+    font-family:'MutatorSans';
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+  .base_h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 48px;
+    margin: 20px 0;
+  }
+  
+  .base_p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 20px 0;
+  }
