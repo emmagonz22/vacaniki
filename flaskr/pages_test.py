@@ -20,18 +20,18 @@ def client(app):
 def test_homepage(client):
    resp = client.get("/")
    assert resp.status_code == 200
-   assert b"Vacationiki - One stop shop for the greatest vacation sites!\n" in resp.data
+   assert b"Vacationiki - One stop shop for the greatest vacation sites!" in resp.data
  
 def test_about_page(client):
    resp = client.get("/about")
    assert resp.status_code == 200
-   assert b"About This Wiki\n" in resp.data
+   assert b"About this Wiki" in resp.data
  
 def test_all_pages(client):
    with patch("flaskr.backend.Backend.get_all_page_names", return_value=["Canada.txt", "California.txt"]):
        resp = client.get("/pages")
        assert resp.status_code == 200
-       assert b"Vactionwiki Pages\n" in resp.data
+       assert b"Vactionwiki Index" in resp.data
  
 @patch("flaskr.backend.Backend.get_wiki_page", return_value=b"test.")
 def test_get_page(mock_get_wiki_page, client):
