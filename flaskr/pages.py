@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, flash, send_file
+from flask import Flask, redirect, render_template, request, url_for, flash, send_file, render_template_string
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required, UserMixin
 from google.cloud import storage
 from flaskr.backend import Backend
@@ -41,10 +41,11 @@ def make_endpoints(app):
     @app.route("/pages/<name>")
     def page(name):
        """Returns the page from `get_wiki_page()` method."""
-       return render_template(
-           "main.html",
+       wiki_page =  backend.get_wiki_page(name)
+       print(wiki_page)
+       return render_template_string(
+           wiki_page,
            page_name=name,
-           page_content=backend.get_wiki_page(name)
        )
 
 

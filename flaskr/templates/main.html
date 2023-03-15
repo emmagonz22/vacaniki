@@ -40,7 +40,9 @@
         </div>
     </nav>
 {% endblock navbar %}
+{% block content %}
 
+{% endblock %}
 {% block flash_messages %}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
