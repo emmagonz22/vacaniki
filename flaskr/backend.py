@@ -71,9 +71,10 @@ class Backend:
             content:
                 File that is going to be uploaded (Images [png, jpeg, etc], html file, css file, etc)
         
-        """  
+        """ 
+
         new_page_blob = self.bucket_content.blob(content_name)
-        new_page_blob.upload_from_file(content)
+        new_page_blob.upload_from_file(content, content_type=content.content_type)
 
 
     def sign_up(self, username: str, password: str):
