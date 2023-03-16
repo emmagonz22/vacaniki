@@ -16,9 +16,9 @@
     <nav>
         <div style="margin-right: 30px;">
             <ul class="navbar"> <!--Add link to app.py and use jinja template to render links-->
-                <li> <a href="{{url_for('home')}}"> Home</a>  </li>
-                <li> <a href="{{url_for('all_pages')}}"> Pages </a> </li>
-                <li> <a href="{{url_for('about')}}"> About </a> </li>
+                <li> <a class="custom-a" href="{{url_for('home')}}"> Home</a>  </li>
+                <li> <a class="custom-a" href="{{url_for('all_pages')}}"> Pages </a> </li>
+                <li> <a class="custom-a" href="{{url_for('about')}}"> About </a> </li>
        
                 |
                 <!-- Add User and | when log in-->
@@ -26,13 +26,13 @@
                 {% if current_user.is_authenticated %}
                 {{ current_user.username }}
                 |
-                <li> <a href="{{url_for('upload')}}"> Upload </a> </li>
-                <li> <a href="{{url_for('logout')}}"> Log out </a></li>
+                <li> <a class="custom-a" href="{{url_for('upload')}}"> Upload </a> </li>
+                <li> <a class="custom-a" href="{{url_for('logout')}}"> Log out </a></li>
 
                 {% else %}
                 
-                <li> <a href="{{url_for('login')}}"> Login </a> </li>
-                <li> <a href="{{url_for('sign_up')}}"> Sign up </a></li>
+                <li> <a class="custom-a" href="{{url_for('login')}}"> Login </a> </li>
+                <li> <a class="custom-a" href="{{url_for('sign_up')}}"> Sign up </a></li>
 
                 {% endif %}
             
