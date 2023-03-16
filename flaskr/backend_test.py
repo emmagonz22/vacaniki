@@ -134,12 +134,12 @@ def test_get_image_success():
     blob_mock.exists.return_value = True
     backend.bucket_content.blob.return_value = blob_mock
 
-    result = backend.get_image("test_image")
+    result = backend.get_image("test_image", bytes_io=MagicMock())
 
     backend.bucket_content.blob.assert_called_once_with("test_image")
     blob_mock.exists.assert_called_once_with(backend.storage_client)
     blob_mock.download_as_bytes.assert_called_once()
 
     # compare that the result is as expected
-    expected_result = b64encode(b"image_data").decode("utf-8")
+    expected_result = BytesIO(b"image_data")
     assert result == expected_result

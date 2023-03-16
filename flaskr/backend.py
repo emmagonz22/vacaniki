@@ -2,6 +2,7 @@
 from google.cloud import storage
 import hashlib
 from base64 import b64encode
+from io import BytesIO
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -130,7 +131,7 @@ class Backend:
 
         return False
 
-    def get_image(self, name: str, encode_64=b64encode):
+    def get_image(self, name: str, bytes_io=BytesIO):
         """Query image from the GCS's content bucket.
 
         Query image from the GCS's content bucket.
@@ -140,13 +141,14 @@ class Backend:
                 The image's blob name (not file name) 
 
         Returns:
-            A tuple with the corresponding image and content_type of the blob, if not found return Image not Found
+            Image data from the blob with name of the parameter 'name'
 
         """  
 
     
-        image_blob = self.bucket_content.blob(name)
+        image_blob = self.bucket_content.get_blob(name)
 
-        if image_blob.exists(self.storage_client):
-            return encode_64(image_blob.download_as_bytes()).decode("utf-8") ## Content type can be use for image format
-        return "Image not found" ## This can change to an raise Exception
+        content_byte = image_blob.download_as_bytes()
+        
+        return bytes_io(content_byte)
+

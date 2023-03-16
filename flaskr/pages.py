@@ -4,6 +4,8 @@ from google.cloud import storage
 from flaskr.backend import Backend
 from flaskr.user_model import User
 import hashlib
+import werkzeug
+from io import BytesIO
 
 def make_endpoints(app):
     # create an instance of the Backend class
@@ -24,10 +26,13 @@ def make_endpoints(app):
         """Returns about page."""
         return render_template('about.html')
 
-    @app.route("/images/<img>")
-    def images(img):
+    @app.route("/images/<img_blob_name>")
+    def images(img_blob_name):
         """Returns image from from `get_image()` method."""
-        return send_file(backend.get_image(img), mimetype='image/jpeg')
+        #return img_blob_name
+        img = backend.get_image(img_blob_name)
+        #print('sendfile: ',send_file(img,mimetype='image/jpeg'))
+        return send_file(img,mimetype='image/jpeg')
 
     @app.route("/pages")
     def all_pages():
