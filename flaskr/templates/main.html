@@ -43,14 +43,12 @@
         </div>
     </nav>
 {% endblock navbar %}
-{% block content %}
 
-{% endblock %}
 {% block flash_messages %}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="status" role="alert">
-                <ul>
+                <ul style="padding: 0;">
                     {% for message in messages %}
                         <li>{{ message }}</li>
                     {% endfor %}
