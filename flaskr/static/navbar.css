@@ -26,6 +26,16 @@ li {
 
 
 }
+.username{
+    color: rgba(0, 0, 255, .6);
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.username-container{
+    display: flex;
+ 
+}
 .navbar{
     display: flex;
     justify-content: space-between;

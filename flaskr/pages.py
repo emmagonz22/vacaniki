@@ -18,7 +18,7 @@ def make_endpoints(app):
         return render_template(
             'main.html',
             page_name="Vacationiki",
-            page_content="Vacationiki - One stop shop for the greatest vacation sites!",
+            page_content="One stop shop for the greatest vacation sites!",
         )
     
     @app.route("/about")

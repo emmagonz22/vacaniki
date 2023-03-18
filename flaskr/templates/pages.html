@@ -1,13 +1,28 @@
 {% extends 'main.html' %}
 
-{% block content %}
-<head>
+{% block head %}
+    {{super()}}
     <title>{{ page_name }}</title>
-</head>
+    <style>
+        .page-index-li{
+            list-style-type: square;
+        }
+        ul{
+            display:  flex;
+            justify-content: center;
+        }
+
+                
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
 <body>
     <ul>
     {% for page in all_pages %}
-        <li><a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
+        <li class="page-index-li"><a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
     {% endfor %}
     </ul>
 </body>
