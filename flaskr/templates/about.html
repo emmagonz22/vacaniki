@@ -21,8 +21,9 @@
     </div>
 
     <div class="author">
-        <div> <h4 class="author-name">Cesar</h4></div>
-        <img src="{{ url_for('images', img_blob_name='')}}" alt="">
+        <div> <h4 class="author-name">Cesar Olague</h4></div>
+        <div> <h5 class="author-name">California State University, Dominguez Hills</h5></div>
+        <img src="{{ url_for('images', img_blob_name='CesarOlagueAuthor.jpg')}}" alt="Emmanuel J. Gonzalez Morales">
     </div>
 
 
@@ -44,7 +45,8 @@ img {
 	border: 2px solid black;
     border-radius: 50%;
     width: 260px;
-    height: 260px;
+    height: 260px; 
+    object-fit: fill;
 }
 .author{
     margin-left: 60px;
