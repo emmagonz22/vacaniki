@@ -14,6 +14,6 @@ test:
  - lint
  script:
  - pip3 install -r requirements.txt
- - pytest .
+ - pytest . -v
  only:
  - pushes
