@@ -1,7 +1,6 @@
 from flaskr.backend import Backend
 from unittest.mock import Mock, MagicMock, patch, create_autospec, mock_open
 import pytest
-from base64 import b64encode
 from io import BytesIO
 # TODO(Project 1): Write tests for Backend methods.
 

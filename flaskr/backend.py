@@ -1,7 +1,6 @@
 # TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
-from base64 import b64encode
 from io import BytesIO
 """Backend class for the `Vacapedia` platform
 
