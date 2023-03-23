@@ -9,7 +9,7 @@ lint:
 
 
 test:
- stage: build 
+ stage: test 
  dependencies: 
  - lint
  script:
