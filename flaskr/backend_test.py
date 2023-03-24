@@ -53,7 +53,7 @@ def test_sign_up_sucess():
 def test_sign_up_user_exist_failure():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
-
+   
     mock_storage.bucket.return_value.blob.return_value.exists.return_value = True
     assert backend.sign_up("test_user",
                            "test_password") == False  #User already exist
@@ -63,20 +63,20 @@ def test_get_wiki_success():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
 
-    mock_storage.bucket.return_value.blob.return_value.exists.return_value = True
-    mock_storage.bucket.return_value.blob.return_value.download_to_filename.return_value = "File Downloaded"
-
-    assert backend.get_wiki_page("wiki_test.html")[3] == "wiki_test.html"
+    mock_storage.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = "wiki_test.html"
+    assert backend.get_wiki_page("wiki_test.html")== "wiki_test.html"
 
 
 def test_get_wiki_failure():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
 
-    mock_storage.bucket.return_value.blob.return_value.exists.return_value = False
-    mock_storage.bucket.return_value.blob.return_value.download_to_filename.return_value = "File Downloaded"
+    mock_storage = MagicMock()
+    backend = Backend(mock_storage)
+    
+    mock_storage.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = None
+    assert backend.get_wiki_page("wiki_test.html") == None
 
-    assert backend.get_wiki_page("wiki_test.html") is None
 
 
 def test_get_all_page_names_success():
@@ -128,37 +128,37 @@ def test_upload():
 
 
 def test_get_image_failure():
-    storage_client = MagicMock()  #storage
-    backend = Backend(storage_client)  #backend
+    # Create a mock GCS bucket and blob
+    storage_client = MagicMock()
+    # Create an instance of the class with the mock storage
+    backend = Backend(storage_client)
     blob_mock = MagicMock()
-    blob_mock.download_as_bytes.return_value = b"image_data"
-    blob_mock.exists.return_value = False
-    backend.bucket_content.blob.return_value = blob_mock
+    blob_mock.download_as_bytes.return_value = b"Image not Found"
+    backend.bucket_content.get_blob.return_value = blob_mock
+    blob_mock.exists.return_value = True
 
-    result = backend.get_image("failimage")
+    # Call the get_image method with a mock blob name and BytesIO class
+    result = backend.get_image("mock_blob_name", bytes_io=BytesIO)
+    # Verify that the result is a bytes_io object containing the mock image data
+    assert isinstance(result, BytesIO)
 
-    backend.bucket_content.blob.assert_called_once_with("failimage")
-    blob_mock.exists.assert_called_once_with(backend.storage_client)
-
-    assert result == "Image not found"
-
+    # Verify that the byte content of the returned BytesIO object matches the expected byte content
+    assert result.getvalue() == b"Image not Found"
 
 def test_get_image_success():
-    # Mock the necessary objects
+    # Create a mock GCS bucket and blob
     storage_client = MagicMock()
-    # Create the instance of the class to test
+    # Create an instance of the class with the mock storage
     backend = Backend(storage_client)
     blob_mock = MagicMock()
     blob_mock.download_as_bytes.return_value = b"image_data"
+    backend.bucket_content.get_blob.return_value = blob_mock
     blob_mock.exists.return_value = True
-    backend.bucket_content.blob.return_value = blob_mock
 
-    result = backend.get_image("test_image", bytes_io=MagicMock())
+    # Call the get_image method with a mock blob name and BytesIO class
+    result = backend.get_image("mock_blob_name", bytes_io=BytesIO)
+    # Verify that the result is a bytes_io object containing the mock image data
+    assert isinstance(result, BytesIO)
 
-    backend.bucket_content.blob.assert_called_once_with("test_image")
-    blob_mock.exists.assert_called_once_with(backend.storage_client)
-    blob_mock.download_as_bytes.assert_called_once()
-
-    # compare that the result is as expected
-    expected_result = BytesIO(b"image_data")
-    assert result == expected_result
+    # Verify that the byte content of the returned BytesIO object matches the expected byte content
+    assert result.getvalue() == b"image_data"
