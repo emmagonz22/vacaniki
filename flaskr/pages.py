@@ -45,7 +45,6 @@ def make_endpoints(app):
     def page(name):
         """Returns the page from `get_wiki_page()` method."""
         wiki_page = backend.get_wiki_page(name)
-        print(wiki_page)
         return render_template_string(
             wiki_page,
             page_name=name,
