@@ -53,7 +53,7 @@ def test_sign_up_sucess():
 def test_sign_up_user_exist_failure():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
-   
+
     mock_storage.bucket.return_value.blob.return_value.exists.return_value = True
     assert backend.sign_up("test_user",
                            "test_password") == False  #User already exist
@@ -64,7 +64,7 @@ def test_get_wiki_success():
     backend = Backend(mock_storage)
 
     mock_storage.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = "wiki_test.html"
-    assert backend.get_wiki_page("wiki_test.html")== "wiki_test.html"
+    assert backend.get_wiki_page("wiki_test.html") == "wiki_test.html"
 
 
 def test_get_wiki_failure():
@@ -73,10 +73,9 @@ def test_get_wiki_failure():
 
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
-    
+
     mock_storage.bucket.return_value.blob.return_value.open.return_value.__enter__.return_value.read.return_value = None
     assert backend.get_wiki_page("wiki_test.html") == None
-
 
 
 def test_get_all_page_names_success():
@@ -144,6 +143,7 @@ def test_get_image_failure():
 
     # Verify that the byte content of the returned BytesIO object matches the expected byte content
     assert result.getvalue() == b"Image not Found"
+
 
 def test_get_image_success():
     # Create a mock GCS bucket and blob

@@ -43,7 +43,7 @@ def test_all_pages(client):
 @patch("flaskr.backend.Backend.get_wiki_page", return_value=b"test.")
 def test_get_page(mock_get_wiki_page, client):
     name = "california"
-    #resp = client.get("/pages/california")
+    #resp = client.get("/pages/california") # This line is given error fix
     #assert resp.status_code == 200
     #assert b"test." in resp.data
     assert mock_get_wiki_page(name) == b"test."
