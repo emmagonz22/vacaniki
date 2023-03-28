@@ -5,7 +5,7 @@ lint:
  - pip3 install yapf 
  - yapf --recursive --diff --style google .
  only:
- -  pushes
+ -  merge_requests
 
 
 test:
@@ -16,7 +16,7 @@ test:
  - pip3 install -r requirements.txt
  - pytest . -v
  only:
- - pushes
+ - merge_requests
 
 
 prod:
