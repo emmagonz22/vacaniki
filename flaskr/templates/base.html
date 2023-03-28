@@ -5,21 +5,32 @@
     <head>
         <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
         {% block head %}
-        <title> {% block title %} Vacapedia {% endblock %}</title>
+        <title> {{page_name}}</title>
+        <link rel="stylesheet"  href="{{ url_for('static', filename='home_styles.css') }}">
         {% endblock %}
        
     </head>
 </head>
 
+
 <body>
 
     <header class="header-content">{% block navbar %} {% endblock %} </header>
-    <!-- TODO(Project 1): Implement routes. -->
+    
     <div style="display: flex; justify-content:center; text-decoration: wavy; text-align: center;">       
-        <!-- TODO(Checkpoint Requirement 3): Change the title and content of your wiki.-->
-        <h1>Welcome to the Awesome wikipedia</h1>
+        <body>
+            <h1 class="base_h1"> {{ page_name }} </h1>
+        </body>
     </div>
+   
+    {% block content %}
+        <div class="home-content">
+            <p class="base_p"> {{ page_content }} </p>
+            <img class="home-image" src="{{  url_for('static', filename='Home_Image.PNG') }}"/>
+        </div>
+    {% endblock %}
     {% block flash_messages %} {% endblock %}
+    <div class="wave"></div>
 </body>
 
 </html>

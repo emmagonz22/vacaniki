@@ -1,25 +1,38 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 
 {% block content %}
-    <h2>Sign Up</h2>
 
     <form class="signup-form" method="POST" action="/signup/">
+        <h2 class="title-text">Sign Up</h2>
         <label for="username">Username:</label>
         <input type="text" name="username" required><br>
         <label for="password">Password:</label>
         <input type="password" name="password" required><br>
-        <input type="submit" value="Sign Up">
-        <label><p>Already have an account? <a href="{{url_for('login')}}">Log in</a></p>
+        <input type="submit" value="Sign Up" style="width:100%; margin-top: 10px;">
+        <label style="text-align: center;"><p>Already have an account? <a href="{{url_for('login')}}">Log in</a></p>
     </form>
   
 {% endblock %}
 
 <!-- reference = https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics -->
-{% block styles %}
+{% block head %}
+{{super()}}
 <style>
+   a{
+        text-decoration: none;
+        color: rgba(0, 0, 255, .6);
+    }
+.title-text{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 32px;
+        color:  rgba(0, 0, 255, .6);
+        margin: 20px 60px;
+        text-align: center;
+    }
 .signup-form {
+    font-family: 'Open Sans', sans-serif;
     max-width: 300px;
-    margin: 0 auto;
+    margin: 30px auto 0 auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;

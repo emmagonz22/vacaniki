@@ -1,21 +1,52 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 
 {% block content %}
-    <h2>Upload File</h2>
-    
+
         <form class="upload-form" method="POST" action="/upload/" enctype="multipart/form-data">
+        <h2 class="title-text">Upload File</h2> 
         <label for="wikipage">Name:</label>
-        <input type="text" name="wikipage" required><br>
-        <label for="file">File Upload:</label>
+        <input type="text" name="wikipage" class="custom-input" required><br>
+        <label for="file" class>File Upload:</label>
+    
         <input type="file" name="file" accept="image/*" required><br>
-        <input type="submit" value="Upload">
+    
+       
+        <input type="submit" value="Upload" class="upload-btn">
     </form>
 {% endblock %}
 
 
-{% block styles %}
+{% block head %}
+{{super()}}
 <style>
+    .title-text{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 32px;
+        color:  rgba(0, 0, 255, .6);
+        margin: 20px 60px;
+        text-align: center;
+    }
+    
+
+    input::file-selector-button {
+    font-weight: bold;
+    color: rgba(0, 0, 255, .6);
+    padding: 0.5em;
+    text-align: center;
+    background-color: white;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+
+input::file-selector-button:hover{
+    
+    color: rgba(0, 0, 255, .6);
+ 
+    background-color: grey;
+   
+}
     .upload-form {
+    font-family: 'Open Sans', sans-serif;
     max-width: 300px;
     margin: 0 auto;
     padding: 20px;
@@ -32,10 +63,36 @@ label {
     margin-bottom: 10px;
 }
 
+
+.custom-input{
+
+
+font-size: 14px;
+border-radius: 6px;
+line-height: 1.5;
+padding: 5px 10px;
+transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+border: 2px solid #dee1e2;
+color: rgb(14, 14, 16);
+background: #dee1e2;
+display: block;
+height: 22px;
+width: 90%;
+
+
+}
+.custom-input:hover {
+border-color: #ccc;
+}
+.custom-input:focus{
+border-color: rgba(0, 0, 255, .6);
+background: #fff;
+}
 input[type=file]
 input[type=text] {
     width: 100%;
     padding: 10px;
+    margin-top: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.288);
@@ -54,6 +111,12 @@ input[type=submit] {
 
 input[type=submit]:hover {
     background-color: #45a049;
+   
+}
+.upload-btn{
+    width: 100%; 
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 </style>
 {% endblock %}

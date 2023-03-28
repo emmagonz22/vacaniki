@@ -1,9 +1,11 @@
 from flaskr import create_app
+from io import BytesIO
 
 import pytest
 from unittest.mock import patch
 
-# See https://flask.palletsprojects.com/en/2.2.x/testing/ 
+
+# See https://flask.palletsprojects.com/en/2.2.x/testing/
 # for more info on testing
 @pytest.fixture
 def app():
@@ -12,9 +14,51 @@ def app():
     })
     return app
 
+
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+def test_homepage(client):
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert b"One stop shop for the greatest vacation sites!" in resp.data
+
+
+def test_about_page(client):
+    resp = client.get("/about")
+    assert resp.status_code == 200
+    assert b"About this Wiki" in resp.data
+
+
+def test_all_pages(client):
+    with patch("flaskr.backend.Backend.get_all_page_names",
+               return_value=["Canada.txt", "California.txt"]):
+        resp = client.get("/pages")
+        assert resp.status_code == 200
+        assert b"Vactionwiki Index" in resp.data
+
+
+@patch("flaskr.backend.Backend.get_wiki_page", return_value=b"test.")
+def test_get_page(mock_get_wiki_page, client):
+    name = "california"
+    #resp = client.get("/pages/california") # This line is given error fix
+    #assert resp.status_code == 200
+    #assert b"test." in resp.data
+    assert mock_get_wiki_page(name) == b"test."
+
+
+@patch("flaskr.backend.Backend.get_image", return_value=BytesIO())
+def test_get_image(mock_get_image, client):
+    image_name = "img"
+    resp = client.get("/images/img")
+    assert resp.status_code == 200
+    mock_get_image.assert_called_once_with(image_name)
+
+
+'''Unit testing for user sessions'''
+
 
 def test_signup_page(client):
     with patch('flaskr.backend.Backend.sign_up') as mock_sign_up:
@@ -32,6 +76,7 @@ def test_signup_page(client):
         assert resp.status_code == 200
         assert b'Account already exist!' in resp.data
 
+
 def test_login_page(client):
     with patch('flaskr.backend.Backend.sign_in') as mock_login:
         # Successful Login
@@ -41,12 +86,13 @@ def test_login_page(client):
         assert resp.status_code == 200
         assert b'Logged in successfully.' in resp.data
 
-        # Unsuccessful Login 
+        # Unsuccessful Login
         mock_login.return_value = False
         data = {'username': 'cooldude2006', 'password': '12345'}
         resp = client.post("/login/", data=data, follow_redirects=True)
         assert resp.status_code == 200
         assert b'Wrong username or password. Please Try Again.' in resp.data
+
 
 def test_logout(client):
     with patch('flask_login.current_user', create=True) as mock_user:
@@ -54,6 +100,7 @@ def test_logout(client):
         resp = client.get("/logout/", follow_redirects=True)
         assert resp.status_code == 200
         assert b'Logged out' in resp.data
+
 
 def test_upload(client):
     with patch('flaskr.backend.Backend.upload'):

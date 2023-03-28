@@ -1,25 +1,39 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 
 {% block content %}
-    <h2>Log in</h2>
+   
 
     <form class="login-form" method="POST" action="/login/">
+        <h2 class="title-text">Log in</h2>
         <label for="username">Username:</label>
         <input type="text" name="username" required><br>
         <label for="password">Password:</label>
         <input type="password" name="password" required><br>
-        <input type="submit" value="Login">
-        <label><p>Don't have an account? <a href="{{url_for('sign_up')}}">Sign up</a></p>
+        <input type="submit" value="Login" style="width:100%; margin-top: 10px;">
+        <label style="text-align: center;"><p>Don't have an account? <a href="{{url_for('sign_up')}}">Sign up</a></p>
     </form>
   
 {% endblock %}
 
 <!-- reference = https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics -->
-{% block styles %}
+{% block head %}
+    {{super()}}
     <style>
+    a{
+        text-decoration: none;
+        color: rgba(0, 0, 255, .6);
+    }
+    .title-text{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 32px;
+        color:  rgba(0, 0, 255, .6);
+        margin: 20px 60px;
+        text-align: center;
+    }
     .login-form {
+        font-family: 'Open Sans', sans-serif;
         max-width: 300px;
-        margin: 0 auto;
+        margin: 30px auto 0 auto;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -54,6 +68,7 @@
 
     input[type="submit"]:hover {
         background-color: #0fb30f;
+        
     }
     </style>
 {% endblock %}
