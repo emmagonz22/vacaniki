@@ -2,15 +2,37 @@
 
 {% block content %}
 <h3>About this Wiki</h3>
-
+<p class="wiki-description">
+    Welcome to the Vacation Spots Wiki, your ultimate guide 
+    to the world's best vacation destinations! Our wiki is
+    dedicated to providing you with detailed information about 
+    the most popular and exciting vacation spots around the globe.
+</p>
 <!-- TODO(Project 1): Add info about the wiki. -->
 
 <h3>Your Authors</h3>
 
 <!-- TODO(Project 1): Add team members and pictures to about page. -->
-<img src="team_image_url1.jpg" alt="Image of Team Member 1">
-<img src="team_image_url2.jpg" alt="Image of Team Member 2">
-<img src="team_image_url3.jpg" alt="Image of Team Member 3">
+<div class="authors-container">
+    <div class="author">
+        <div> <h4 class="author-name">Emmanuel González Morales</h4></div>
+        <div> <h5 class="author-name">University of Puerto Rico Mayaguez Campus</h5></div>
+        <img src="{{ url_for('images', img_blob_name='EmmanuelGonzalezMoralesAuthor')}}" alt="Emmanuel J. Gonzalez Morales">
+    </div>
+
+    <div class="author">
+        <div> <h4 class="author-name">Cesar Olague</h4></div>
+        <div> <h5 class="author-name">California State University, Dominguez Hills</h5></div>
+        <img src="{{ url_for('images', img_blob_name='CesarOlagueAuthor.jpg')}}" alt="Cesar Olague">
+    </div>
+
+
+    <div class="author">
+
+        <div> <h4 class="author-name">Francisco</h4></div>
+        <img src="{{ url_for('images', img_blob_name='')}}" alt="">
+    </div>
+</div>
 {% endblock %}
 
 
@@ -21,15 +43,46 @@ img {
     display: block;
 	margin: 0 auto;
 	border: 2px solid black;
+    border-radius: 50%;
+    width: 260px;
+    height: 260px; 
+    object-fit: fill;
 }
+.author{
+    margin-left: 60px;
+    margin-right: 60px;
+    flex-basis: 33%;
 
+}
+.wiki-description{
+    margin-left: 65px;
+    margin-right: 65px;
+    font-family: 'Open Sans', sans-serif;
+
+    /*text-indent: 25px;*/
+}
+.author-name{
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+.authors-container{
+    display: inline-flex;
+    justify-items: center;
+    width: 100%;
+}
 h3 {
+    font-family: 'Open Sans', sans-serif;
     font-size: 32px;
-    color: rgb(108, 3, 117);
+    color:  rgba(0, 0, 255, .6);
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
 }
 
 p {
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.5;
 }
 </style>

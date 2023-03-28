@@ -9,30 +9,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
 {% endblock head %}
 
 {% block navbar %}
 
     <nav>
         <div style="margin-right: 30px;">
-            <ul class="navbar"> <!--Add link to app.py and use jinja template to render links-->
-                <li> <a href="{{url_for('home')}}"> Home</a>  </li>
-                <li> <a href="{{url_for('all_pages')}}"> Pages </a> </li>
-                <li> <a href="{{url_for('about')}}"> About </a> </li>
-       
-                |
+            <ul class="navbar nav-ul"> <!--Add link to app.py and use jinja template to render links-->
+                <li> <a class="custom-a" href="{{url_for('home')}}"> Home</a>  </li>
+                <li> <a class="custom-a" href="{{url_for('all_pages')}}"> Pages </a> </li>
+                <li> <a class="custom-a" href="{{url_for('about')}}"> About </a> </li>
+                {% if current_user.is_authenticated %}
+                <div class="username-container">
+                | 
                 <!-- Add User and | when log in-->
                 <!-- Select navbar component if user is authenticated -->
-                {% if current_user.is_authenticated %}
-                {{ current_user.username }}
+              
+                <div class="username">{{ current_user.username }}</div>
                 |
-                <li> <a href="{{url_for('upload')}}"> Upload </a> </li>
-                <li> <a href="{{url_for('logout')}}"> Log out </a></li>
+                </div>
+                <li> <a class="custom-a" href="{{url_for('upload')}}"> Upload </a> </li>
+                <li> <a class="custom-a" href="{{url_for('logout')}}"> Log out </a></li>
 
                 {% else %}
-                
-                <li> <a href="{{url_for('login')}}"> Login </a> </li>
-                <li> <a href="{{url_for('sign_up')}}"> Sign up </a></li>
+                |
+                <li> <a class="custom-a" href="{{url_for('login')}}"> Login </a> </li>
+                <li> <a class="custom-a" href="{{url_for('sign_up')}}"> Sign up </a></li>
 
                 {% endif %}
             
@@ -40,14 +43,12 @@
         </div>
     </nav>
 {% endblock navbar %}
-{% block content %}
 
-{% endblock %}
 {% block flash_messages %}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="status" role="alert">
-                <ul>
+                <ul style="padding: 0;">
                     {% for message in messages %}
                         <li>{{ message }}</li>
                     {% endfor %}

@@ -1,9 +1,10 @@
 .status {
-    color: #8836f4;
+    color: rgba(0, 0, 255, .6);
     font-size: 14px;
     font-family:'MutatorSans';
     font-style: normal;
     margin-bottom: 10px;
+    padding: 0;
 }
 
   .base_h1 {
@@ -14,7 +15,28 @@
   
   .base_p {
     font-family: 'Open Sans', sans-serif;
-    font-size: 18px;
+    font-size: 34px;
     line-height: 1.5;
-    margin: 20px 0;
+    margin: 10px 5px;
+    color:rgba(0, 0, 255, .6);
   }
+  
+  .home-image{
+        width: 400px;
+        height: 400px;
+        margin-top: 30px;        
+  }
+
+    .home-content{
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+
+    }
+
+    .image-position{
+ 
+        width: 100%;
+        justify-content: end ;
+     
+    }
