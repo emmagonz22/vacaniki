@@ -4,8 +4,8 @@
 
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet"  href='/static/navbar.css'>
-  <link rel="stylesheet"  href='/static/home_styles.css'>
+  <link rel="stylesheet"  href="{{ url_for('static', filename='navbar.css') }}">
+  <link rel="stylesheet"  href="{{ url_for('static', filename='home_styles.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
