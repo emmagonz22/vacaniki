@@ -131,3 +131,16 @@ def make_endpoints(app):
                 backend.upload(wikipage, file)
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
+
+
+    @login_required
+    @app.route('/delete/', methods = ['GET'])
+    def delete_user():
+        success_uploads = backend.delete_user_uploads(current_user.username)
+        success_user = backend.delete_user(current_user.username)
+
+        if success_uploads and success_user:
+            logout_user()
+            flash('successfully deleted user')
+
+        return redirect(url_for('home'))
