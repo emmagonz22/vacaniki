@@ -1,7 +1,7 @@
-# TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
 from io import BytesIO
+import os
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -78,6 +78,7 @@ class Backend:
         new_page_blob.upload_from_file(content,
                                        content_type=content.content_type)
 
+
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
 
@@ -151,3 +152,51 @@ class Backend:
         content_byte = image_blob.download_as_bytes()
 
         return bytes_io(content_byte)
+
+
+    def delete_user_uploads(self, curr_user):
+        """Move a user's uploads to a Deleted_Users file and delete the original folder.
+
+            Args:
+                curr_user:
+                     Username of the user whose uploads will be deleted.
+        """
+        blobs = self.bucket_content.list_blobs(prefix=f'{curr_user}/')
+
+        if blobs:
+            for blob in blobs:
+                # gets original filename
+                original_filename = os.path.basename(blob.name)
+
+                # create the name of deleted blob
+                deleted_blob_name = f'Deleted_Users/{original_filename}'
+                deleted_blob = self.bucket_content.blob(deleted_blob_name)
+
+                # Copy original contents to deleted blob
+                original_content = blob.download_as_string()
+                deleted_blob.upload_from_string(original_content)
+
+                # delete original
+                blob.delete()
+
+
+    def delete_user(self, curr_user):
+        """Deletes a User and password content from the Bucket
+
+            Args:
+                curr_user:
+                     Username of the user who will be deleted.
+
+            Returns:
+                True if the user was deleted, False otherwise.
+        """
+        user_blob = self.bucket_user_password.blob(curr_user)
+
+        if user_blob.exists(self.storage_client):
+            # Delete the user's password from the user_password bucket
+            user_blob.delete()
+            
+            return True
+        else: 
+            # User wasn't deleted, something went wrong
+            return False
