@@ -20,13 +20,10 @@ class User(UserMixin):
 
         #create a unique id using the username input to load user session
         self.username: str = username
-
+        self.id: str = username
         # Retrieve USer data from GCS
-        backend = Backend()
-        user_data = backend.get_user_data(self.username)
-        print(user_data)
-
-        self.id = user_data.get("username")
+        backend: Backend = Backend()
+        user_data: dict = backend.get_user_data(self.username)
         self.email: str = user_data.get("email")
         self.name: str = user_data.get("name")
         self.description: str = user_data.get("description")

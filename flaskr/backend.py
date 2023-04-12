@@ -131,7 +131,7 @@ class Backend:
                 'created_at': '',
                 'description': ''
             }
-            blob = self.user_data_bucket.blob("username")
+            blob = self.user_data_bucket.blob(f"{username}")
 
             json_file_name = f'{username}-data.json'
             with open(json_file_name, 'w') as f:
