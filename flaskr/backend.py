@@ -78,11 +78,11 @@ class Backend:
         """
 
         new_blob = self.bucket_content.blob(content_name)
-        new_blob.upload_from_file(content,
-                                       content_type=content.content_type)
+        new_blob.upload_from_file(content, content_type=content.content_type)
 
-    def upload_user_profile_picture(self, username: str, image_name: str,
-               image: str):  #Add content to the content-bucket (a blob object)
+    def upload_user_profile_picture(
+            self, username: str, image_name: str,
+            image: str):  #Add content to the content-bucket (a blob object)
         """Upload image format file to the GCS username-data bucket.
 
         Upload image file to the GCS username-data bucket if the user already have a profile picture then is going to overwrite the image.
@@ -96,8 +96,7 @@ class Backend:
         """
 
         new_image_blob = self.user_data_bucket.blob(image_name)
-        new_image_blob.upload_from_file(image,
-                                       content_type=image.content_type)
+        new_image_blob.upload_from_file(image, content_type=image.content_type)
 
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
@@ -123,17 +122,17 @@ class Backend:
             print("Account doesn't exist")
 
             # Creating json file with basic user-data
-            user_data = { 
+            user_data = {
                 'username': username,
-                'name' : '',
+                'name': '',
                 'email': '',
                 'uploaded_wiki': [],
-                'uploaded_image': [], 
+                'uploaded_image': [],
                 'created_at': '',
                 'description': ''
             }
             blob = self.user_data_bucket.blob("username")
-        
+
             json_file_name = f'{username}-data.json'
             with open(json_file_name, 'w') as f:
                 json.dump(user_data, f)
@@ -144,7 +143,6 @@ class Backend:
         else:
             print(f"User {username} already exist")
             return False
-
 
     def sign_in(self, username, password):
         """Verify credential in the GCS's user-password bucket
@@ -200,6 +198,7 @@ class Backend:
             The desired user's data to return
 
     """
+
     def get_user_data(self, username):
         data_blob = self.user_data_bucket.get_blob(username)
         if not data_blob:
@@ -207,5 +206,3 @@ class Backend:
         data = data_blob.download_as_text()
         print(json.loads(data))
         return json.loads(data)
-
-            

@@ -165,26 +165,28 @@ def test_get_image_success():
     # Verify that the byte content of the returned BytesIO object matches the expected byte content
     assert result.getvalue() == b"image_data"
 
+
 def tearDown():
-    # Remove all temporary JSON files with -data.json at the end of file name 
+    # Remove all temporary JSON files with -data.json at the end of file name
     tmp_files = [f for f in os.listdir() if f.endswith("-data.json")]
     for tmp_file in tmp_files:
         os.remove(tmp_file)
+
 
 def test_get_user_data():
     # Test for an existing user
     existing_username = 'glegionmob'
     existing_user_data = {
         'username': existing_username,
-        'name' : "Carlos Rosa",
+        'name': "Carlos Rosa",
         'email': 'carlos.rosa@example.com',
         'uploaded_wiki': ['CuevasdeCamuy.html'],
-        'uploaded_image': ['CuevasdeCammuyentrance.png'], 
+        'uploaded_image': ['CuevasdeCammuyentrance.png'],
         'created_at': '4-12-2023',
         'description': 'Like to travel'
     }
 
-     # Create a mock GCS bucket and blob
+    # Create a mock GCS bucket and blob
     storage_client = MagicMock()
     # Create an instance of the class with the mock storage
     backend = Backend(storage_client)
@@ -203,4 +205,4 @@ def test_get_user_data():
 
     backend.user_data_bucket.get_blob.return_value = None
     non_existing_user_data = backend.get_user_data(non_existent_username)
-    assert non_existing_user_data == {'username' : non_existent_username}
+    assert non_existing_user_data == {'username': non_existent_username}
