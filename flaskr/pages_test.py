@@ -61,10 +61,21 @@ def test_get_image(mock_get_image, client):
 
 
 def test_signup_page(client):
-    with patch('flaskr.backend.Backend.sign_up') as mock_sign_up:
+    with patch('flaskr.backend.Backend.sign_up') as mock_sign_up, patch(
+            'flaskr.backend.Backend') as mock_backend:
         # Successful signup
         mock_sign_up.bucket_user_password.blob.return_value = MagicMock()
         mock_sign_up.user_data_bucket.blob.return_value = MagicMock()
+
+        # Mock Backend object and its methods
+        mock_backend.return_value = MagicMock()
+        mock_backend.return_value.get_user_data.return_value = {
+            'username': 'cooldude2006',
+            'email': 'cooldude2006@example.com',
+            'name': 'Cool Dude',
+            'description': 'Just a cool dude',
+        }
+
         mock_sign_up.return_value = True
         data = {'username': 'Cesar', 'password': '123'}
         resp = client.post("/signup/", data=data, follow_redirects=True)
