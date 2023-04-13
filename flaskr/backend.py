@@ -206,3 +206,47 @@ class Backend:
         data = data_blob.download_as_text()
         print(json.loads(data))
         return json.loads(data)
+
+    def upload_file_registry(self, username):
+        ''' Upload user file registry onto their json profile-data file
+
+        Appends user uploads from wiki-content bucket onto the user profile-data json file to be added to the user data bucket
+
+        Args:
+            username:
+                The desired user's username to be updated
+        '''
+        user_json = self.get_user_data(username)
+        uploads_blob = self.bucket_content.list_blobs(prefix=f'{username}/')
+
+        # lists to store the name of uploaded pages and images of the user
+        wiki_pages = user_json.get("uploaded_wiki", [])
+        images = user_json.get("uploaded_image", [])
+
+        # set used to check if content is already in the json data
+        content_in_json = set(wiki_pages).union(images)
+
+        # if the blob type is a html, append to the wiki pages list else, append to images
+        if uploads_blob:
+            for blob in uploads_blob:
+                file_name = os.path.basename(blob.name)
+                if file_name in content_in_json:
+                    continue
+                elif blob.content_type == "text/html":
+                    wiki_pages.append(file_name)
+                else:
+                    images.append(file_name)
+
+        # adds new information into the lists inside the json file
+        user_json["uploaded_wiki"] = wiki_pages
+        user_json["uploaded_image"] = images
+
+        # adds json back into the json file
+        json_file_name = f'{username}-data.json'
+        with open(json_file_name, 'w') as f:
+            json.dump(user_json, f)
+            blob.upload_from_filename(json_file_name)
+
+        # upload content back into the bucket
+        blob = self.user_data_bucket.blob(f"{username}")
+        blob.upload_from_filename(json_file_name)
