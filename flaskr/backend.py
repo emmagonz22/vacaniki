@@ -78,7 +78,6 @@ class Backend:
         new_page_blob.upload_from_file(content,
                                        content_type=content.content_type)
 
-
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
 
@@ -153,7 +152,6 @@ class Backend:
 
         return bytes_io(content_byte)
 
-
     def delete_user_uploads(self, curr_user):
         """Move a user's uploads to a Deleted_Users file and delete the original folder.
 
@@ -178,7 +176,6 @@ class Backend:
 
                 # delete original
                 blob.delete()
-
 
     def delete_user(self, curr_user):
         """Deletes a User and password content from the Bucket

@@ -132,7 +132,6 @@ def make_endpoints(app):
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
 
-
     @login_required
     @app.route('/delete/', methods=['GET'])
     def delete_user():
