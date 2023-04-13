@@ -62,14 +62,14 @@ def test_get_image(mock_get_image, client):
 
 def test_signup_page(client):
     with patch('flaskr.backend.Backend.sign_up') as mock_sign_up, patch(
-            'flaskr.backend.Backend') as mock_backend:
+            'flaskr.user_model.User') as mock_user:
         # Successful signup
         mock_sign_up.bucket_user_password.blob.return_value = MagicMock()
         mock_sign_up.user_data_bucket.blob.return_value = MagicMock()
 
         # Mock Backend object and its methods
-        mock_backend.return_value = MagicMock()
-        mock_backend.return_value.get_user_data.return_value = {
+
+        mock_user.return_value.get_user_data.return_value = {
             'username': 'cooldude2006',
             'email': 'cooldude2006@example.com',
             'name': 'Cool Dude',
@@ -92,18 +92,14 @@ def test_signup_page(client):
 
 def test_login_page(client):
     with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
-            'google.cloud.storage') as mock_g_storage, patch(
-                'flaskr.user_model.User') as mock_user, patch(
-                    'flaskr.backend.Backend') as mock_backend:
+            'flaskr.user_model.User') as mock_user:
 
         # Successful Login]
 
         mock_login.bucket_user_password.blob.return_value = MagicMock()
         mock_login.user_data_bucket.blob.return_value = MagicMock()
 
-        # Mock Backend object and its methods
-        mock_backend.return_value = MagicMock()
-        mock_backend.return_value.get_user_data.return_value = {
+        mock_user.return_value.get_user_data.return_value = {
             'username': 'cooldude2006',
             'email': 'cooldude2006@example.com',
             'name': 'Cool Dude',
