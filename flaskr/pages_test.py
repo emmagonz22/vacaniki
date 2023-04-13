@@ -81,15 +81,10 @@ def test_signup_page(client):
 
 def test_login_page(client):
     with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
-            'google.cloud.storage.Client') as mock_storage_client, patch(
-                'google.cloud.storage.Bucket') as mock_bucket, patch(
-                    'google.cloud.storage.Blob') as mock_blob, patch(
-                        'flaskr.user_model.User') as mock_user:
+            'google.cloud.storage') as mock_g_storage, patch(
+                'flaskr.user_model.User') as mock_user:
         # Successful Login]
-        mock_storage_client.return_value = MagicMock()
-        mock_bucket.return_value = MagicMock()
-        mock_blob.return_value = MagicMock()
-
+ 
         mock_login.bucket_user_password.blob.return_value = MagicMock()
         mock_login.user_data_bucket.blob.return_value = MagicMock()
 
