@@ -195,8 +195,6 @@ class Backend:
         if user_blob.exists(self.storage_client):
             # Delete the user's password from the user_password bucket
             user_blob.delete()
-            
             return True
-        else: 
-            # User wasn't deleted, something went wrong
+        else:
             return False

@@ -134,16 +134,16 @@ def make_endpoints(app):
 
 
     @login_required
-    @app.route('/delete/', methods = ['GET'])
+    @app.route('/delete/', methods=['GET'])
     def delete_user():
         backend.delete_user_uploads(current_user.username)
         success_user = backend.delete_user(current_user.username)
-            
-        if success_user: # checks if the user deletion was successful
+        if success_user:  # checks if the user deletion was successful
             logout_user()
-            flash('successfully deleted user')
+            flash('Successfully deleted user')
         else:
-            flash('Something went wrong') # if something wrong happens, print an error and redirect
+            # if something wrong happens, print an error and redirect
+            flash('Something went wrong')
             redirect(url_for('home'))
 
         return redirect(url_for('home'))
