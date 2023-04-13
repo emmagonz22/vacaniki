@@ -84,7 +84,7 @@ def test_login_page(client):
             'google.cloud.storage') as mock_g_storage, patch(
                 'flaskr.user_model.User') as mock_user:
         # Successful Login]
- 
+
         mock_login.bucket_user_password.blob.return_value = MagicMock()
         mock_login.user_data_bucket.blob.return_value = MagicMock()
 
