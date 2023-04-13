@@ -2,7 +2,7 @@ from flaskr import create_app
 from io import BytesIO
 
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, Mock, MagicMock, patch, create_autospec, mock_open
 
 
 # See https://flask.palletsprojects.com/en/2.2.x/testing/
@@ -63,6 +63,8 @@ def test_get_image(mock_get_image, client):
 def test_signup_page(client):
     with patch('flaskr.backend.Backend.sign_up') as mock_sign_up:
         # Successful signup
+        mock_sign_up.bucket_user_password.blob.return_value = MagicMock()
+        mock_sign_up.user_data_bucket.blob.return_value = MagicMock()
         mock_sign_up.return_value = True
         data = {'username': 'Cesar', 'password': '123'}
         resp = client.post("/signup/", data=data, follow_redirects=True)
@@ -80,6 +82,8 @@ def test_signup_page(client):
 def test_login_page(client):
     with patch('flaskr.backend.Backend.sign_in') as mock_login:
         # Successful Login
+        mock_login.bucket_user_password.blob.return_value = MagicMock()
+        mock_login.user_data_bucket.blob.return_value = MagicMock()
         mock_login.return_value = True
         data = {'username': 'cooldude2006', 'password': '12345'}
         resp = client.post("/login/", data=data, follow_redirects=True)
