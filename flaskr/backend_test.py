@@ -119,11 +119,25 @@ def test_upload():
     mock_storage = MagicMock()
     backend = Backend(mock_storage)
 
-    bucket = backend.bucket_content
-    blob = bucket.blob("TestBlob")
-    blob.upload_from_file("content")
+    # Prepare test data
+    username = 'test_user'
+    content_name = 'test_content.html'
+    content_data = b'This is a test content'
+    content = BytesIO(content_data)
+    content.content_type = 'text/html'
 
-    assert blob.exists("TestBlob")
+    # Mock blob method
+    mock_blob = MagicMock()
+    mock_blob.return_value = b'test data'
+    backend.bucket_content.blob.return_value = mock_blob
+
+    # Call upload method
+    backend.upload(username, content_name, content)
+    backend.bucket_content.blob.return_value = mock_blob
+
+    backend.bucket_content.blob.assert_called_with(f'{username}/{content_name}')
+    mock_blob.upload_from_file.assert_called_with(
+        content, content_type=content.content_type)
 
 
 def test_get_image_failure():
