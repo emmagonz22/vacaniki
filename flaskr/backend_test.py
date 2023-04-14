@@ -162,31 +162,3 @@ def test_get_image_success():
 
     # Verify that the byte content of the returned BytesIO object matches the expected byte content
     assert result.getvalue() == b"image_data"
-
-
-def test_delete_user_content():
-
-    mock_storage = MagicMock()
-    backend = Backend(mock_storage)
-
-    # Set up mock blobs
-    new_prefix = "Deleted_Users/"
-    test_content = "test-content.txt"
-    old_prefix = "testuser/"
-
-    old_blob = Mock()
-    old_blob.name = f"{old_prefix}{test_content}"
-    new_blob = Mock()
-    new_blob.name = f"{new_prefix}"
-
-    # behavior of mock storage
-    backend.bucket_content.list_blobs.return_value = [old_blob]
-    backend.bucket_content.copy_blob.side_effect = lambda blob, _, new_blob_name: new_blob if new_blob_name == f"{new_prefix}{test_content}" else None
-
-    # Call the delete_user method
-    backend.delete_user_content("testuser")
-
-    # Check that the old blob was deleted and the new blob was created
-    backend.bucket_content.copy_blob.assert_called_once_with(
-        old_blob, backend.bucket_content, f"{new_prefix}{test_content}")
-    old_blob.delete.assert_called_once_with()

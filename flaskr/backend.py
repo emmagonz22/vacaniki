@@ -151,33 +151,3 @@ class Backend:
         content_byte = image_blob.download_as_bytes()
 
         return bytes_io(content_byte)
-
-    def delete_user_content(self, username):
-        """Delete User with given username
-
-        Delete user with given username and move all the user content to the Delete_Users/ prefix in GCS's content bucker
-
-        Args:
-            username:
-                Username of user to be deleted
-        """
-
-        # Iterate through all blobs with the old_prefix
-        blobs = self.bucket_content.list_blobs(prefix=f'{username}/')
-        print(blobs)
-        for blob in blobs:
-            # Construct the new blob name with the new_prefix
-            new_blob_name = blob.name.replace(f'{username}/', "Deleted_Users/",
-                                              1)
-
-            # Copy the blob to the new location
-            new_blob = self.bucket_content.copy_blob(blob, self.bucket_content,
-                                                     new_blob_name)
-
-            # Delete the old blob
-            blob.delete()
-
-        # Delete the old prefix directory (assumes the old_prefix is a directory)
-        old_prefix_directory_blob = self.bucket_content.blob(
-            f'{username}/'.rstrip('/'))
-        old_prefix_directory_blob.delete()
