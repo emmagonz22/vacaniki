@@ -2,10 +2,9 @@ from google.cloud import storage
 import hashlib
 from io import BytesIO
 import os
-<<<<<<< flaskr/backend.py
-=======
+
 import json
->>>>>>> flaskr/backend.py
+
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -191,7 +190,6 @@ class Backend:
 
         return bytes_io(content_byte)
 
-<<<<<<< flaskr/backend.py
     def delete_user_uploads(self, curr_user):
         """Move a user's uploads to a Deleted_Users file and delete the original folder.
 
