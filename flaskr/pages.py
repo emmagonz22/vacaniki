@@ -30,9 +30,18 @@ def make_endpoints(app):
     def images(img_blob_name):
         """Returns image from from `get_image()` method."""
         #return img_blob_name
-        img = backend.get_image(img_blob_name)
-        #print('sendfile: ',send_file(img,mimetype='image/jpeg'))
-        return send_file(img, mimetype='image/jpeg')
+        if current_user.username:
+            img = backend.get_image(img_blob_name, prefix=current_user.username)
+        else:
+            img = backend.get_image(img_blob_name)
+ 
+        if img_blob_name.endswith('.jpeg') or img_blob_name.endswith('.jpg'):
+            mimetype = 'image/jpeg'
+        else:
+            mimetype = 'image/png'
+        
+        print("Loading image with mime: ", mimetype, img)       
+        return send_file(img, mimetype=mimetype)
 
     @app.route("/pages")
     def all_pages():
@@ -132,12 +141,28 @@ def make_endpoints(app):
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
 
+    
     @login_required
-    @app.route('/<username>', methods=['GET', 'POST'])
+    @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
-        '''Returns upload page'''
+        username = current_user.username
+        user_data = backend.get_user_data(current_user.username)
+        
+        return render_template('profile_view.html', user_data=user_data)
+      
+    @app.route('/edit-user', methods=['GET', 'POST'])
+    def edit_user():
         if request.method == 'GET':
-            return render_template('profile_view.html')
+            return redirect(url_for('profile_view'))
         else:
-            #When post update Profile view
-            return render_template('profile_view.html')
+            # Get the form data
+            name = request.form.get('name')
+            description = request.form.get('description')
+            image = request.files.get('image')
+            if backend.edit_user(current_user.username, name, description, image):
+                print("User updated Successfully")
+            else:
+                print("Error updating user")
+          
+            return redirect(url_for('profile_view', username=current_user.username))            
+        return 'Form not submitted successfully'

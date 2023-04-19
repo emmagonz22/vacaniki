@@ -4,16 +4,123 @@
 {% block content %}
 <!-- TODO(Project 1): Add info about the wiki. -->
 
-<h3>{{ current_user.username }}</h3>
+{% if user_data.name == '' %}
 
+    <div> <h3 class="">No name</h3></div>
+
+{% else %}
+
+    <div> <h3 class="">{{user_data.name}}</h3></div>
+
+{% endif %}
 <!-- TODO(Project 1): Add team members and pictures to about page. -->
 <div class="user-container">
     <div class="user">
-        <div> <h4 class="user-name">Emmanuel González Morales</h4></div>
-        <div> <h5 class="user-name">University of Puerto Rico Mayaguez Campus</h5></div>
-        <img src="{{ url_for('images', img_blob_name='EmmanuelGonzalezMoralesAuthor')}}" alt="Emmanuel J. Gonzalez Morales">
+        <div class="profile-photo">
+
+            {% if user_data.get("profile_photo") == True and url_for('images', img_blob_name=current_user.username+'/profile_pic')  %}
+
+                <img src="{{ url_for('images', img_blob_name='profile_pic', username=current_user.username) }}" alt="{{current_user.username}}">
+
+            {% else %}
+    
+                <img src="{{ url_for('static', filename='default_user_pic.png') }}" alt="{{current_user.username}}">
+
+            {% endif %}
+        </div>
+      
+        <div> <h4 class="user-name"> {{ user_data.username }} </h4></div>
+        <div >
+            Description:
+            <div class="user-description">
+           
+                <div class="description-text">
+                    {% if user_data.get("profile_photo") != ""  %}
+
+                        {{ user_data.description }}
+                    
+                    {% else %}
+            
+                        No description
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+      
+    </div>
+    <div class="user">
+        Uploaded Files
+        <div class="user-files">
+           
+            <div class="files-text">
+                {% if user_data.get("uploaded_image")  %}
+
+                    {{ user_data.description }}
+                
+                {% else %}
+        
+                    No files
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="user">
+        Uploaded Wikis
+        <div class="user-files">
+           
+            <div class="files-text">
+                {% if user_data.get("uploaded_wiki")  %}
+
+                    {{ user_data.description }}
+                
+                {% else %}
+        
+                    No wikipages
+
+                {% endif %}
+            </div>
+        </div>
+        <div class="user-buttons">
+
+            <button class="edit-btn open-modal">Edit</button>
+
+            <button class="delete-btn">Delete</button>
+
+        </div>
+        
     </div>
 </div>
+
+<div class="modal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="edit-modal-title">Edit Modal</div>
+        <span class="close-button">&times;</span>
+      </div>
+      
+     
+      <form action="/edit-user" method="post" enctype="multipart/form-data" class="edit-form">
+        <label for="image">Image:</label>
+        <div>
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png" required>
+        </div>
+        <label for="name">Name:</label>
+        <div>
+        <input style="width: 100%" type="text" id="name" name="name" maxlength="50" value="{{user_data.name}}" required>
+        </div>
+        <label for="description">Description:</label>
+        <div>
+            <textarea style="width: 100%;" id="description" name="description" maxlength="200" value="{{user_data.description}}" required></textarea>
+        </div>
+        <div style="display: flex; justify-content: end;">
+            <input class="submit-btn" type="submit" value="Submit">
+        </div>
+    </form>
+    </div>
+</div>
+
 {% endblock %}
 
 
@@ -30,10 +137,39 @@ img {
     object-fit: fill;
 }
 .user{
+    font-family: 'Open Sans', sans-serif;
     margin-left: 60px;
     margin-right: 60px;
     flex-basis: 33%;
 
+}
+.user-description{
+    font-family: 'Open Sans', sans-serif;
+    border-width: .5px;
+    height: 150px;
+    border-color: black;
+    border: thick solid;
+    box-shadow: 8px 8px 2px 1px rgba(0, 0, 255, .2);
+}
+.user-files{
+    font-family: 'Open Sans', sans-serif;
+    border-width: .5px;
+    height: 300px;
+    border-color: black;
+    border: thick solid;
+    box-shadow: 8px 8px 2px 1px rgba(0, 0, 255, .2);
+}
+.description-text
+{
+    text-align: justify;
+    text-justify: inter-word;
+    text-indent: 50px;
+}
+.files-text
+{
+    text-align: justify;
+    text-justify: inter-word;
+    text-indent: 50px;
 }
 .wiki-description{
     margin-left: 65px;
@@ -66,5 +202,153 @@ p {
 	font-size: 18px;
 	line-height: 1.5;
 }
+.delete-btn {
+        background-color: #ee3d36;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        margin-left: 30px;
+    
+}
+
+.edit-btn {
+        background-color: #8b93ea;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 30px;
+        margin-right: 30px;
+}
+.user-buttons{
+    width: 100%;  
+    height: 180px;  
+    display: flex;
+    align-items: end;
+    justify-content: end;
+}
+
+
+.edit-btn:hover{
+    background-color: #6a74e0;
+}
+.delete-btn:hover{
+    background-color: #d31009;
+}
+
+/*Modal Credits to https://www.w3docs.com/snippets/javascript/how-to-create-a-modal-dialog-box-with-css-and-javascript.html*/
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #8b93ea;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #eeeeee;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px black;
+}
+.close-button {
+    font-size: 28px;
+    width: 1rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 30px;
+    background-color: #eeeeee;
+}
+.close-button:hover {
+    background-color: #adadad;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+input[type=submit] {
+    
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+   
+}
+
+input::file-selector-button:hover{
+    
+    color: rgba(0, 0, 255, .6);
+ 
+    background-color: grey;
+   
+}
+input::file-selector-button {
+    font-weight: bold;
+    color: rgba(0, 0, 255, .6);
+    padding: 0.5em;
+    text-align: center;
+    background-color: white;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+.edit-form {
+    font-family: 'Open Sans', sans-serif;
+    max-width: 300px;
+    margin: 30px auto 0 auto;
+}
+.edit-modal-title{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 28px;
+    color:  rgba(0, 0, 255, .6);
+    margin: 5px;
+}
+input{box-sizing:border-box} 
+textarea{box-sizing:border-box} 
 </style>
+<script>
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        let modal = document.querySelector(".modal");
+        let trigger = document.querySelector(".open-modal");
+        let closeButton = document.querySelector(".close-button");
+        let submitButton = document.querySelector(".close-button");
+        function toggleModal() {
+            modal.classList.toggle("show-modal");
+            console.log("Modal");
+        }
+        function windowOnClick(event) {
+        if(event.target === modal) {
+            toggleModal();
+        }
+        }
+
+        trigger.addEventListener("click", toggleModal);
+        closeButton.addEventListener("click", toggleModal);
+        window.addEventListener("click", windowOnClick);
+    });
+
+  </script>
 {% endblock %}

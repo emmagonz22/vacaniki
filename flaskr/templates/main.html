@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-
 {% endblock head %}
 
 {% block navbar %}
@@ -26,7 +25,7 @@
                 <!-- Add User and | when log in-->
                 <!-- Select navbar component if user is authenticated -->
               
-                <div class="username">{{ current_user.username }}</div>
+                <div class="username"><a  href="{{ url_for('profile_view', username=current_user.username) }}">{{ current_user.username }}</a></div>
                 |
                 </div>
                 <li> <a class="custom-a" href="{{url_for('upload')}}"> Upload </a> </li>
