@@ -245,8 +245,7 @@ class Backend:
         json_file_name = f'{username}-data.json'
         with open(json_file_name, 'w') as f:
             json.dump(user_json, f)
-            blob.upload_from_filename(json_file_name)
 
-        # upload content back into the bucket
+        # upload json content back into the content
         blob = self.user_data_bucket.blob(f"{username}")
         blob.upload_from_filename(json_file_name)
