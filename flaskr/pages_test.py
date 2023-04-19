@@ -51,6 +51,7 @@ def test_get_page(mock_get_wiki_page, client):
 
 @patch("flaskr.backend.Backend.get_image", return_value=BytesIO())
 def test_get_image(mock_get_image, client):
+
     image_name = "img"
     resp = client.get("/images/img")
     assert resp.status_code == 200

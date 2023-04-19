@@ -30,7 +30,7 @@ def make_endpoints(app):
     def images(img_blob_name):
         """Returns image from from `get_image()` method."""
         #return img_blob_name
-        if current_user.username:
+        if current_user.is_authenticated:
             img = backend.get_image(img_blob_name, prefix=current_user.username)
         else:
             img = backend.get_image(img_blob_name)
