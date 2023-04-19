@@ -133,7 +133,6 @@ def make_endpoints(app):
                 return redirect(url_for('upload'))
 
     @login_required
-<<<<<<< flaskr/pages.py
     @app.route('/delete/', methods=['GET'])
     def delete_user():
         backend.delete_user_uploads(current_user.username)
