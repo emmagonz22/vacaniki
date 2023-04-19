@@ -146,8 +146,8 @@ def make_endpoints(app):
             redirect(url_for('home'))
 
         return redirect(url_for('home'))
-        @app.route('/<username>', methods=['GET', 'POST'])
-
+        
+    @app.route('/<username>', methods=['GET', 'POST'])
     def profile_view(username):
         '''Returns upload page'''
         if request.method == 'GET':
