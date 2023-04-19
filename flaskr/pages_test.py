@@ -1,6 +1,7 @@
 from flaskr import create_app
+from flask import url_for
 from io import BytesIO
-
+from flask_login import current_user
 import pytest
 from unittest.mock import patch, Mock, MagicMock, patch, create_autospec, mock_open
 
@@ -18,6 +19,7 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
 
 
 def test_homepage(client):
@@ -136,3 +138,75 @@ def test_upload(client):
         resp = client.post("/upload/", data=data, follow_redirects=True)
         assert resp.status_code == 200
         assert b'No File Input' in resp.data
+
+def test_profile_view( client):
+
+    with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
+            'flaskr.user_model.User') as mock_user:
+        # login pass 
+        #mock 
+        mock_login.bucket_user_password.blob.return_value = MagicMock()
+        mock_login.user_data_bucket.blob.return_value = MagicMock()
+
+        mock_user.return_value.get_user_data.return_value = {
+            'username': 'cooliodude2001',
+            'email': 'cooldude2006@example.com',
+            'name': 'Coolio Dude',
+            'description': 'Just a coolio dude',
+        }
+        mock_login.return_value = True
+        data = {'username': 'cooliodude2001', 'password': '12345'}
+        resp = client.post("/login/", data=data, follow_redirects=False)
+
+      
+        assert resp.status_code == 302
+        home_resp = client.get(resp.headers['Location'])
+        assert home_resp.status_code == 200
+        assert b'Logged in successfully.' in home_resp.data
+
+        # fail login
+        mock_login.return_value = False
+        data = {'username': 'cooliodude2001', 'password': '12345'}
+        resp = client.post("/login/", data=data, follow_redirects=True)
+        
+        assert resp.status_code == 200
+
+        assert b'Wrong username or password. Please Try Again.' in resp.data
+
+def test_edit_user(client):
+    with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
+            'flaskr.user_model.User') as mock_user:
+        # login pass 
+        #mock 
+        mock_login.bucket_user_password.blob.return_value = MagicMock()
+        mock_login.user_data_bucket.blob.return_value = MagicMock()
+        
+        class MockUser:
+            username = 'cooliodude2001'
+            email = 'cooldude2006@example.com'
+            name = 'Coolio Dude'
+            description = 'Just a coolio dude'
+
+            def get_user_data(self):
+                return {
+                    'username': self.username,
+                    'email': self.email,
+                    'name': self.name,
+                    'description': self.description,
+                }
+            def is_authenticated(self):
+                return True
+
+        mock_user.return_value = MockUser()
+        mock_login.return_value = True
+        data = {'username': 'cooliodude2001', 'password': '12345'}
+        resp = client.post("/login/", data=data, follow_redirects=False)
+
+        assert resp.status_code == 302
+        home_resp = client.get(resp.headers['Location'])
+        assert home_resp.status_code == 200
+        assert b'Logged in successfully.' in home_resp.data
+        new_data =  {'name': 'COLIO', 'description': 'new description', 'image': b"image"}
+        resp = client.post('/edit-user', data=new_data, follow_redirects=True)
+        assert resp.status_code == 200
+        assert b'Uploaded Files' in resp.data

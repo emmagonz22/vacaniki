@@ -145,13 +145,18 @@ def make_endpoints(app):
     @login_required
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
-        username = current_user.username
-        user_data = backend.get_user_data(current_user.username)
-        
-        return render_template('profile_view.html', user_data=user_data)
-      
+        if current_user.is_authenticated:
+            username = current_user.username
+            user_data = backend.get_user_data(current_user.username)
+            return render_template('profile_view.html', user_data=user_data)
+        else:
+            return redirect(url_for('login'))
+
+    @login_required
     @app.route('/edit-user', methods=['GET', 'POST'])
     def edit_user():
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
         if request.method == 'GET':
             return redirect(url_for('profile_view'))
         else:
