@@ -21,7 +21,6 @@ def client(app):
     return app.test_client()
 
 
-
 def test_homepage(client):
     resp = client.get("/")
     assert resp.status_code == 200
@@ -139,12 +138,13 @@ def test_upload(client):
         assert resp.status_code == 200
         assert b'No File Input' in resp.data
 
-def test_profile_view( client):
+
+def test_profile_view(client):
 
     with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
             'flaskr.user_model.User') as mock_user:
-        # login pass 
-        #mock 
+        # login pass
+        #mock
         mock_login.bucket_user_password.blob.return_value = MagicMock()
         mock_login.user_data_bucket.blob.return_value = MagicMock()
 
@@ -158,7 +158,6 @@ def test_profile_view( client):
         data = {'username': 'cooliodude2001', 'password': '12345'}
         resp = client.post("/login/", data=data, follow_redirects=False)
 
-      
         assert resp.status_code == 302
         home_resp = client.get(resp.headers['Location'])
         assert home_resp.status_code == 200
@@ -168,19 +167,20 @@ def test_profile_view( client):
         mock_login.return_value = False
         data = {'username': 'cooliodude2001', 'password': '12345'}
         resp = client.post("/login/", data=data, follow_redirects=True)
-        
+
         assert resp.status_code == 200
 
         assert b'Wrong username or password. Please Try Again.' in resp.data
 
+
 def test_edit_user(client):
     with patch('flaskr.backend.Backend.sign_in') as mock_login, patch(
             'flaskr.user_model.User') as mock_user:
-        # login pass 
-        #mock 
+        # login pass
+        #mock
         mock_login.bucket_user_password.blob.return_value = MagicMock()
         mock_login.user_data_bucket.blob.return_value = MagicMock()
-        
+
         class MockUser:
             username = 'cooliodude2001'
             email = 'cooldude2006@example.com'
@@ -194,6 +194,7 @@ def test_edit_user(client):
                     'name': self.name,
                     'description': self.description,
                 }
+
             def is_authenticated(self):
                 return True
 
@@ -206,7 +207,11 @@ def test_edit_user(client):
         home_resp = client.get(resp.headers['Location'])
         assert home_resp.status_code == 200
         assert b'Logged in successfully.' in home_resp.data
-        new_data =  {'name': 'COLIO', 'description': 'new description', 'image': b"image"}
+        new_data = {
+            'name': 'COLIO',
+            'description': 'new description',
+            'image': b"image"
+        }
         resp = client.post('/edit-user', data=new_data, follow_redirects=True)
         assert resp.status_code == 200
         assert b'Uploaded Files' in resp.data

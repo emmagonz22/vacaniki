@@ -36,6 +36,7 @@ class User(UserMixin):
     """
     Convert the User object to string with user basic information
     """
+
     def __str__(self):
         return f"User: {self.username}"
         #, Full name: {self.first_name} {self.second_name}, Description {self.description}"

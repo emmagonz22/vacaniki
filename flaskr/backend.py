@@ -80,8 +80,9 @@ class Backend:
         new_blob = self.bucket_content.blob(content_name)
         new_blob.upload_from_file(content, content_type=content.content_type)
 
-    def upload_user_profile_picture(self, username, content_name,
-               content):  #Add content to the content-bucket (a blob object)
+    def upload_user_profile_picture(
+            self, username, content_name,
+            content):  #Add content to the content-bucket (a blob object)
         """Upload content to the GCS content bucket.
 
      
@@ -100,7 +101,6 @@ class Backend:
         new_page_blob = self.bucket_content.blob(f"{username}/{content_name}")
         new_page_blob.upload_from_file(content,
                                        content_type=content.content_type)
-
 
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
@@ -190,26 +190,26 @@ class Backend:
         if prefix == "":
             image_blob = self.bucket_content.get_blob(name)
         else:
-            blobs = self.storage_client.list_blobs(self.bucket_content.name, prefix=prefix)
+            blobs = self.storage_client.list_blobs(self.bucket_content.name,
+                                                   prefix=prefix)
             #blobs = self.bucket_content.list_blobs(prefix=prefix)
-           
+
             for blob in blobs:
                 if blob.name.endswith(name):
                     print(blob.name, name)
                     image_blob = blob
                     break
             else:
-            # The loop completed without finding the blob, so raise an error
-                raise ValueError(f"No blob found with prefix/name {prefix}/{name}")
-    
+                # The loop completed without finding the blob, so raise an error
+                raise ValueError(
+                    f"No blob found with prefix/name {prefix}/{name}")
+
         if image_blob is None:
             raise ValueError(f"No blob found with prefix/name {prefix}/{name}")
 
         content_byte = image_blob.download_as_bytes()
 
         return bytes_io(content_byte)
-
-  
 
     def get_user_data(self, username):
         """Query user data from the Google cloud storage
@@ -228,7 +228,7 @@ class Backend:
         #print(json.loads(data))
         return json.loads(data)
 
-    def edit_user(self, username,  name, description, image):
+    def edit_user(self, username, name, description, image):
         """Modify user data from GCS
     
         Get user with given username and replace is name, description and profile picture
@@ -247,8 +247,8 @@ class Backend:
         data_blob = self.user_data_bucket.get_blob(username)
         if not data_blob:
             return False
-       
-       # download json as string 
+
+    # download json as string
         blob_content = data_blob.download_as_string()
 
         # convert to dictionary
@@ -257,8 +257,7 @@ class Backend:
         data['name'] = name
         data['description'] = description
         data['profile_photo'] = True
-        
-    
+
         #COnvert to json
         new_data_json = json.dumps(data).encode('utf-8')
         data_blob.upload_from_string(new_data_json)
@@ -267,4 +266,3 @@ class Backend:
         self.upload_user_profile_picture(username, "profile_pic", image)
 
         return True
-

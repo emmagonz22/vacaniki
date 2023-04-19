@@ -34,13 +34,13 @@ def make_endpoints(app):
             img = backend.get_image(img_blob_name, prefix=current_user.username)
         else:
             img = backend.get_image(img_blob_name)
- 
+
         if img_blob_name.endswith('.jpeg') or img_blob_name.endswith('.jpg'):
             mimetype = 'image/jpeg'
         else:
             mimetype = 'image/png'
-        
-        print("Loading image with mime: ", mimetype, img)       
+
+        print("Loading image with mime: ", mimetype, img)
         return send_file(img, mimetype=mimetype)
 
     @app.route("/pages")
@@ -141,7 +141,6 @@ def make_endpoints(app):
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
 
-    
     @login_required
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
@@ -164,10 +163,12 @@ def make_endpoints(app):
             name = request.form.get('name')
             description = request.form.get('description')
             image = request.files.get('image')
-            if backend.edit_user(current_user.username, name, description, image):
+            if backend.edit_user(current_user.username, name, description,
+                                 image):
                 print("User updated Successfully")
             else:
                 print("Error updating user")
-          
-            return redirect(url_for('profile_view', username=current_user.username))            
+
+            return redirect(
+                url_for('profile_view', username=current_user.username))
         return 'Form not submitted successfully'
