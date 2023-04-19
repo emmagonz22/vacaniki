@@ -1,6 +1,8 @@
 from flaskr.backend import Backend
 from unittest.mock import Mock, MagicMock, patch, create_autospec, mock_open
 import pytest
+import os
+import json
 from io import BytesIO
 # TODO(Project 1): Write tests for Backend methods.
 
@@ -162,3 +164,45 @@ def test_get_image_success():
 
     # Verify that the byte content of the returned BytesIO object matches the expected byte content
     assert result.getvalue() == b"image_data"
+
+
+def tearDown():
+    # Remove all temporary JSON files with -data.json at the end of file name
+    tmp_files = [f for f in os.listdir() if f.endswith("-data.json")]
+    for tmp_file in tmp_files:
+        os.remove(tmp_file)
+
+
+def test_get_user_data():
+    # Test for an existing user
+    existing_username = 'glegionmob'
+    existing_user_data = {
+        'username': existing_username,
+        'name': "Carlos Rosa",
+        'email': 'carlos.rosa@example.com',
+        'uploaded_wiki': ['CuevasdeCamuy.html'],
+        'uploaded_image': ['CuevasdeCammuyentrance.png'],
+        'created_at': '4-12-2023',
+        'description': 'Like to travel'
+    }
+
+    # Create a mock GCS bucket and blob
+    storage_client = MagicMock()
+    # Create an instance of the class with the mock storage
+    backend = Backend(storage_client)
+    backend.user_data_bucket = Mock()
+    # Mock the get_blob method to return a Blob instance
+    blob_mock = Mock()
+    blob_mock.download_as_text.return_value = json.dumps(existing_user_data)
+    backend.user_data_bucket.get_blob.return_value = blob_mock
+
+    # Test the get_user_data method
+    user_data = backend.get_user_data(existing_username)
+    assert user_data == existing_user_data
+
+    # Test for a user that doesn't exist
+    non_existent_username = 'non_existent_username'
+
+    backend.user_data_bucket.get_blob.return_value = None
+    non_existing_user_data = backend.get_user_data(non_existent_username)
+    assert non_existing_user_data == {'username': non_existent_username}

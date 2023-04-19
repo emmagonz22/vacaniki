@@ -131,3 +131,13 @@ def make_endpoints(app):
                 backend.upload(wikipage, file)
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
+
+    @login_required
+    @app.route('/<username>', methods=['GET', 'POST'])
+    def profile_view(username):
+        '''Returns upload page'''
+        if request.method == 'GET':
+            return render_template('profile_view.html')
+        else:
+            #When post update Profile view
+            return render_template('profile_view.html')
