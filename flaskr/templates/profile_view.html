@@ -55,9 +55,11 @@
            
             <div class="files-text">
                 {% if user_data.get("uploaded_image")  %}
-
-                    {{ user_data.description }}
-                
+                    <ul>
+                        {% for file in user_data.get("uploaded_image") %}
+                            <li>{{ file }}</li>
+                        {% endfor %}
+                    </ul>
                 {% else %}
         
                     No files
@@ -72,9 +74,11 @@
            
             <div class="files-text">
                 {% if user_data.get("uploaded_wiki")  %}
-
-                    {{ user_data.description }}
-                
+                <ul>
+                    {% for wiki in user_data.get("uploaded_wiki") %}
+                        <li>{{ wiki }}</li>
+                    {% endfor %}
+                </ul>
                 {% else %}
         
                     No wikipages
