@@ -133,6 +133,7 @@ def make_endpoints(app):
                 return redirect(url_for('upload'))
 
     @login_required
+<<<<<<< flaskr/pages.py
     @app.route('/delete/', methods=['GET'])
     def delete_user():
         backend.delete_user_uploads(current_user.username)
@@ -146,3 +147,13 @@ def make_endpoints(app):
             redirect(url_for('home'))
 
         return redirect(url_for('home'))
+        @app.route('/<username>', methods=['GET', 'POST'])
+
+    def profile_view(username):
+        '''Returns upload page'''
+        if request.method == 'GET':
+            return render_template('profile_view.html')
+        else:
+            #When post update Profile view
+            return render_template('profile_view.html')
+

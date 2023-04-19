@@ -2,6 +2,10 @@ from google.cloud import storage
 import hashlib
 from io import BytesIO
 import os
+<<<<<<< flaskr/backend.py
+=======
+import json
+>>>>>>> flaskr/backend.py
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -22,6 +26,7 @@ class Backend:
         self.storage_client = storage_client
         self.bucket_content = self.storage_client.bucket("wikiviewer-content")
         self.bucket_user_password = self.storage_client.bucket("user-passwords")
+        self.user_data_bucket = self.storage_client.bucket("username-data")
 
     def get_wiki_page(self, name):
         """Get wiki page with specific name
@@ -74,9 +79,26 @@ class Backend:
         
         """
 
-        new_page_blob = self.bucket_content.blob(content_name)
-        new_page_blob.upload_from_file(content,
-                                       content_type=content.content_type)
+        new_blob = self.bucket_content.blob(content_name)
+        new_blob.upload_from_file(content, content_type=content.content_type)
+
+    def upload_user_profile_picture(
+            self, username: str, image_name: str,
+            image: str):  #Add content to the content-bucket (a blob object)
+        """Upload image format file to the GCS username-data bucket.
+
+        Upload image file to the GCS username-data bucket if the user already have a profile picture then is going to overwrite the image.
+
+        Args:
+            image_name:
+                Name of the image that is going to be uploaded.
+            image:
+                Image that is going to be uploaded (Images [png, jpeg])
+        
+        """
+
+        new_image_blob = self.user_data_bucket.blob(image_name)
+        new_image_blob.upload_from_file(image, content_type=image.content_type)
 
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
@@ -100,6 +122,23 @@ class Backend:
 
         if not new_user_blob.exists(self.storage_client):
             print("Account doesn't exist")
+
+            # Creating json file with basic user-data
+            user_data = {
+                'username': username,
+                'name': '',
+                'email': '',
+                'uploaded_wiki': [],
+                'uploaded_image': [],
+                'created_at': '',
+                'description': ''
+            }
+            blob = self.user_data_bucket.blob(f"{username}")
+
+            json_file_name = f'{username}-data.json'
+            with open(json_file_name, 'w') as f:
+                json.dump(user_data, f)
+            blob.upload_from_filename(json_file_name)
             with new_user_blob.open("w") as new_user:
                 new_user.write(hash_password)
                 return True
@@ -152,6 +191,7 @@ class Backend:
 
         return bytes_io(content_byte)
 
+<<<<<<< flaskr/backend.py
     def delete_user_uploads(self, curr_user):
         """Move a user's uploads to a Deleted_Users file and delete the original folder.
 
@@ -195,3 +235,20 @@ class Backend:
             return True
         else:
             return False
+            
+    def get_user_data(self, username):
+        """Query user data from the Google cloud storage
+    
+        Query user data from the Google cloud storage, if the user doesn't exist in the username-data bucket raise Exception "User doesn't exist"
+
+        Args:
+            username:
+                The desired user's data to return
+
+        """
+        data_blob = self.user_data_bucket.get_blob(username)
+        if not data_blob:
+            return {'username': username}
+        data = data_blob.download_as_text()
+        print(json.loads(data))
+        return json.loads(data)

@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from flaskr.backend import Backend
 """User model for the 
 
 User model extending the UserMixin class with feature to add more custom data from the User
@@ -12,23 +13,20 @@ Typical usage example:
 
 class User(UserMixin):
 
-    def __init__(self,
-                 username: str,
-                 email: str = "",
-                 first_name: str = "",
-                 second_name: str = "",
-                 description: str = "",
-                 profile_picture: str = None):
+    def __init__(
+        self,
+        username: str,
+    ):
 
         #create a unique id using the username input to load user session
         self.username: str = username
-        self.id = username
-
-        self.email: str = email
-        self.first_name: str = first_name
-        self.second_name: str = second_name
-        self.description: str = description
-        self.profile_picture = profile_picture
+        self.id: str = username
+        # Retrieve USer data from GCS
+        backend: Backend = Backend()
+        user_data: dict = backend.get_user_data(self.username)
+        self.email: str = user_data.get("email")
+        self.name: str = user_data.get("name")
+        self.description: str = user_data.get("description")
 
     #returns User
     @staticmethod
