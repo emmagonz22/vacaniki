@@ -209,7 +209,7 @@ def test_get_user_data():
 
 
 def test_upload_file_registry():
-     # Create a mock GCS bucket and blob
+    # Create a mock GCS bucket and blob
     bucket = MagicMock()
     blob = MagicMock()
     bucket.blob.return_value = blob
@@ -225,6 +225,9 @@ def test_upload_file_registry():
 
     with open('test_user-data.json') as f:
         uploaded_json = json.load(f)
-        
+
     # check to see json is matching
-    assert uploaded_json == {'uploaded_image': [], 'uploaded_wiki': ['page1.html']}
+    assert uploaded_json == {
+        'uploaded_image': [],
+        'uploaded_wiki': ['page1.html']
+    }
