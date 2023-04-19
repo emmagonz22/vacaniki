@@ -166,7 +166,7 @@ def test_get_image_success():
     assert result.getvalue() == b"image_data"
 
 
-<<<<<<< flaskr/backend_test.py
+
 def test_delete_user_uploads():
     storage_client = MagicMock()
     backend = Backend(storage_client)
