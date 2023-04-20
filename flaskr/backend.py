@@ -231,7 +231,7 @@ class Backend:
     def edit_user(self, username, name, description, image):
         """Modify user data from GCS
     
-        Get user with given username and replace is name, description and profile picture
+        Get user with given username and replace is name, description and profile picture.
 
         Args:
             username:
@@ -242,6 +242,8 @@ class Backend:
                 New description (string) for the user
             image:
                 New profile picture for the user
+        Returns:
+            True if user is modified and False if blob is not found.
         """
 
         data_blob = self.user_data_bucket.get_blob(username)

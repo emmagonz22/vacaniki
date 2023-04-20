@@ -15,10 +15,10 @@
 
     <nav>
         <div style="margin-right: 30px;">
-            <ul class="navbar nav-ul"> <!--Add link to app.py and use jinja template to render links-->
-                <li> <a class="custom-a" href="{{url_for('home')}}"> Home</a>  </li>
-                <li> <a class="custom-a" href="{{url_for('all_pages')}}"> Pages </a> </li>
-                <li> <a class="custom-a" href="{{url_for('about')}}"> About </a> </li>
+            <ul class="navbar"> <!--Add link to app.py and use jinja template to render links-->
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('home')}}"> Home</a>  </li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('all_pages')}}"> Pages </a> </li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('about')}}"> About </a> </li>
                 {% if current_user.is_authenticated %}
                 <div class="username-container">
                 | 
@@ -28,13 +28,13 @@
                 <div class="username"><a  href="{{ url_for('profile_view', username=current_user.username) }}">{{ current_user.username }}</a></div>
                 |
                 </div>
-                <li> <a class="custom-a" href="{{url_for('upload')}}"> Upload </a> </li>
-                <li> <a class="custom-a" href="{{url_for('logout')}}"> Log out </a></li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('upload')}}"> Upload </a> </li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('logout')}}"> Log out </a></li>
 
                 {% else %}
                 |
-                <li> <a class="custom-a" href="{{url_for('login')}}"> Login </a> </li>
-                <li> <a class="custom-a" href="{{url_for('sign_up')}}"> Sign up </a></li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('login')}}"> Login </a> </li>
+                <li class="nav-li"> <a class="custom-a" href="{{url_for('sign_up')}}"> Sign up </a></li>
 
                 {% endif %}
             

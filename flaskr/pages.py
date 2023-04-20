@@ -30,7 +30,7 @@ def make_endpoints(app):
     def images(img_blob_name):
         """Returns image from from `get_image()` method."""
         #return img_blob_name
-        if current_user.is_authenticated:
+        if current_user.is_authenticated and img_blob_name == "profile_pic":
             img = backend.get_image(img_blob_name, prefix=current_user.username)
         else:
             img = backend.get_image(img_blob_name)
@@ -172,3 +172,7 @@ def make_endpoints(app):
             return redirect(
                 url_for('profile_view', username=current_user.username))
         return 'Form not submitted successfully'
+ 
+    @app.route('/template', methods=['GET'])
+    def template():
+        return render_template('article-template.html')
