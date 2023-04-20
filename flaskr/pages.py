@@ -129,6 +129,9 @@ def make_endpoints(app):
             if 'file' not in request.files:
                 flash('No File Input')
                 return redirect(url_for('upload'))
+            elif request.files['file'].content_type == "text/html" and not current_user.is_admin():
+                flash('No admin privileges')
+                return redirect(url_for('upload'))
 
             #grab wikipage name and file content
             wikipage: str = request.form['wikipage']
@@ -157,7 +160,7 @@ def make_endpoints(app):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
         if request.method == 'GET':
-            return redirect(url_for('profile_view'))
+            return redirect(url_for('profile_view', username=current_user.username))
         else:
             # Get the form data
             name = request.form.get('name')
