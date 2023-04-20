@@ -1,7 +1,9 @@
-# TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
 from io import BytesIO
+import os
+
+import json
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -22,6 +24,7 @@ class Backend:
         self.storage_client = storage_client
         self.bucket_content = self.storage_client.bucket("wikiviewer-content")
         self.bucket_user_password = self.storage_client.bucket("user-passwords")
+        self.user_data_bucket = self.storage_client.bucket("username-data")
 
     def get_wiki_page(self, name):
         """Get wiki page with specific name
@@ -102,6 +105,23 @@ class Backend:
 
         if not new_user_blob.exists(self.storage_client):
             print("Account doesn't exist")
+
+            # Creating json file with basic user-data
+            user_data = {
+                'username': username,
+                'name': '',
+                'email': '',
+                'uploaded_wiki': [],
+                'uploaded_image': [],
+                'created_at': '',
+                'description': ''
+            }
+            blob = self.user_data_bucket.blob(f"{username}")
+
+            json_file_name = f'{username}-data.json'
+            with open(json_file_name, 'w') as f:
+                json.dump(user_data, f)
+            blob.upload_from_filename(json_file_name)
             with new_user_blob.open("w") as new_user:
                 new_user.write(hash_password)
                 return True
@@ -153,3 +173,107 @@ class Backend:
         content_byte = image_blob.download_as_bytes()
 
         return bytes_io(content_byte)
+
+    def delete_user_uploads(self, curr_user):
+        """Move a user's uploads to a Deleted_Users file and delete the original folder.
+
+            Args:
+                curr_user:
+                     Username of the user whose uploads will be deleted.
+        """
+        blobs = self.bucket_content.list_blobs(prefix=f'{curr_user}/')
+
+        if blobs:
+            for blob in blobs:
+                # gets original filename
+                original_filename = os.path.basename(blob.name)
+
+                # create the name of deleted blob
+                deleted_blob_name = f'Deleted_Users/{original_filename}'
+                deleted_blob = self.bucket_content.blob(deleted_blob_name)
+
+                # Copy original contents to deleted blob
+                original_content = blob.download_as_string()
+                deleted_blob.upload_from_string(original_content)
+
+                # delete original
+                blob.delete()
+
+    def delete_user(self, curr_user):
+        """Deletes a User and password content from the Bucket
+
+            Args:
+                curr_user:
+                     Username of the user who will be deleted.
+
+            Returns:
+                True if the user was deleted, False otherwise.
+        """
+        user_blob = self.bucket_user_password.blob(curr_user)
+
+        if user_blob.exists(self.storage_client):
+            # Delete the user's password from the user_password bucket
+            user_blob.delete()
+            return True
+        else:
+            return False
+
+    def get_user_data(self, username):
+        """Query user data from the Google cloud storage
+    
+        Query user data from the Google cloud storage, if the user doesn't exist in the username-data bucket raise Exception "User doesn't exist"
+
+        Args:
+            username:
+                The desired user's data to return
+
+        """
+        data_blob = self.user_data_bucket.get_blob(username)
+        if not data_blob:
+            return {'username': username}
+        data = data_blob.download_as_text()
+        print(json.loads(data))
+        return json.loads(data)
+
+    def upload_file_registry(self, username):
+        ''' Upload user file registry onto their json profile-data file
+
+        Appends user uploads from wiki-content bucket onto the user profile-data json file to be added to the user data bucket
+
+        Args:
+            username:
+                The desired user's username to be updated
+        '''
+        user_json = self.get_user_data(username)
+        uploads_blob = self.bucket_content.list_blobs(prefix=f'{username}/')
+
+        # lists to store the name of uploaded pages and images of the user
+        wiki_pages = user_json.get("uploaded_wiki", [])
+        images = user_json.get("uploaded_image", [])
+
+        # set used to check if content is already in the json data
+        content_in_json = set(wiki_pages).union(images)
+
+        # if the blob type is a html, append to the wiki pages list else, append to images
+        if uploads_blob:
+            for blob in uploads_blob:
+                file_name = os.path.basename(blob.name)
+                if file_name in content_in_json:
+                    continue
+                elif blob.content_type == "text/html":
+                    wiki_pages.append(file_name)
+                else:
+                    images.append(file_name)
+
+        # adds new information into the lists inside the json file
+        user_json["uploaded_wiki"] = wiki_pages
+        user_json["uploaded_image"] = images
+
+        # adds json back into the json file
+        json_file_name = f'{username}-data.json'
+        with open(json_file_name, 'w') as f:
+            json.dump(user_json, f)
+
+        # upload json content back into the content
+        blob = self.user_data_bucket.blob(f"{username}")
+        blob.upload_from_filename(json_file_name)

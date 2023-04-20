@@ -1,36 +1,17 @@
+
 {% extends "main.html" %}
 
 {% block content %}
-<h3>About this Wiki</h3>
-<p class="wiki-description">
-    Welcome to the Vacation Spots Wiki, your ultimate guide 
-    to the world's best vacation destinations! Our wiki is
-    dedicated to providing you with detailed information about 
-    the most popular and exciting vacation spots around the globe.
-</p>
 <!-- TODO(Project 1): Add info about the wiki. -->
 
-<h3>Your Authors</h3>
+<h3>{{ current_user.username }}</h3>
 
 <!-- TODO(Project 1): Add team members and pictures to about page. -->
-<div class="authors-container">
-    <div class="author">
-        <div> <h4 class="author-name">Emmanuel González Morales</h4></div>
-        <div> <h5 class="author-name">University of Puerto Rico Mayaguez Campus</h5></div>
+<div class="user-container">
+    <div class="user">
+        <div> <h4 class="user-name">Emmanuel González Morales</h4></div>
+        <div> <h5 class="user-name">University of Puerto Rico Mayaguez Campus</h5></div>
         <img src="{{ url_for('images', img_blob_name='EmmanuelGonzalezMoralesAuthor')}}" alt="Emmanuel J. Gonzalez Morales">
-    </div>
-
-    <div class="author">
-        <div> <h4 class="author-name">Cesar Olague</h4></div>
-        <div> <h5 class="author-name">California State University, Dominguez Hills</h5></div>
-        <img src="{{ url_for('images', img_blob_name='CesarOlagueAuthor.jpg')}}" alt="Cesar Olague">
-    </div>
-
-    
-    <div class="author">
-
-        <div> <h4 class="author-name">Francisco</h4></div>
-        <img src="{{ url_for('images', img_blob_name='')}}" alt="">
     </div>
 </div>
 {% endblock %}
@@ -48,7 +29,7 @@ img {
     height: 260px; 
     object-fit: fill;
 }
-.author{
+.user{
     margin-left: 60px;
     margin-right: 60px;
     flex-basis: 33%;
@@ -61,12 +42,12 @@ img {
 
     /*text-indent: 25px;*/
 }
-.author-name{
+.user-name{
     font-family: 'Open Sans', sans-serif;
     display: flex;
     justify-content: center;
 }
-.authors-container{
+.user-container{
     display: inline-flex;
     justify-items: center;
     width: 100%;
