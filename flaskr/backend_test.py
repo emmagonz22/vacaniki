@@ -244,3 +244,28 @@ def test_get_user_data():
     backend.user_data_bucket.get_blob.return_value = None
     non_existing_user_data = backend.get_user_data(non_existent_username)
     assert non_existing_user_data == {'username': non_existent_username}
+
+
+def test_upload_file_registry():
+    # Create a mock GCS bucket and blob
+    bucket = MagicMock()
+    blob = MagicMock()
+    bucket.blob.return_value = blob
+    # Create an instance of the class with the mock storage
+    backend = Backend(MagicMock())
+    backend.user_data_bucket = bucket
+
+    # Set up the mock data for get_user_data
+    user_json = {'uploaded_wiki': ['page1.html'], 'uploaded_image': []}
+    with patch.object(backend, 'get_user_data', return_value=user_json):
+        # Call the upload_file_registry method
+        backend.upload_file_registry('test_user')
+
+    with open('test_user-data.json') as f:
+        uploaded_json = json.load(f)
+
+    # check to see json is matching
+    assert uploaded_json == {
+        'uploaded_image': [],
+        'uploaded_wiki': ['page1.html']
+    }
