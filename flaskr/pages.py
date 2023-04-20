@@ -147,6 +147,20 @@ def make_endpoints(app):
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
 
+    @app.route('/delete/', methods=['GET'])
+    def delete_user():
+        backend.delete_user_uploads(current_user.username)
+        success_user = backend.delete_user(current_user.username)
+        if success_user:  # checks if the user deletion was successful
+            logout_user()
+            flash('Successfully deleted user')
+        else:
+            # if something wrong happens, print an error and redirect
+            flash('Something went wrong')
+            redirect(url_for('home'))
+
+        return redirect(url_for('home'))
+
     @login_required
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):

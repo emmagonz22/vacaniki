@@ -166,11 +166,49 @@ def test_get_image_success():
     assert result.getvalue() == b"image_data"
 
 
-def tearDown():
-    # Remove all temporary JSON files with -data.json at the end of file name
-    tmp_files = [f for f in os.listdir() if f.endswith("-data.json")]
-    for tmp_file in tmp_files:
-        os.remove(tmp_file)
+def test_delete_user_uploads():
+    storage_client = MagicMock()
+    backend = Backend(storage_client)
+
+    # Create Mock Data for testing
+    curr_user = "test_user"
+    blob_content = "test content"
+    bucket_content = MagicMock()
+
+    # Create a mockup blob for the user's uploads
+    test_blob = bucket_content.blob(f"{curr_user}/test_file.jpg")
+    test_blob.upload_from_string(blob_content)
+
+    # delete the upload and move it to a deleted_users Folder
+    backend.delete_user_uploads(curr_user)
+
+    # Check that the deleted blob was created in the Deleted_Users Folder
+    deleted_blob_name = f"Deleted_Users/test_file.jpg"
+    deleted_blob = bucket_content.blob(deleted_blob_name)
+    print(f"deleted_blob: {deleted_blob}")
+    deleted_blob.upload_from_string.assert_called_once_with(blob_content)
+
+
+def test_delete_user():
+    storage_client = MagicMock()
+    backend = Backend(storage_client)
+
+    # Create a mockup data and objects
+    curr_user = "test_user"
+
+    # Create a mockup blob for the user's password
+    test_blob = backend.bucket_user_password.blob(curr_user)
+    test_blob.upload_from_string("test_password")
+
+    # Run the function being tested
+    result = backend.delete_user(curr_user)
+
+    # Check that the blob was deleted
+    test_blob.delete.assert_called_once()
+
+    # Check that the delete user returns True
+    result = backend.delete_user(curr_user)
+    assert result is True
 
 
 def test_get_user_data():
@@ -207,3 +245,28 @@ def test_get_user_data():
     backend.user_data_bucket.get_blob.return_value = None
     non_existing_user_data = backend.get_user_data(non_existent_username)
     assert non_existing_user_data == {'username': non_existent_username}
+
+
+def test_upload_file_registry():
+    # Create a mock GCS bucket and blob
+    bucket = MagicMock()
+    blob = MagicMock()
+    bucket.blob.return_value = blob
+    # Create an instance of the class with the mock storage
+    backend = Backend(MagicMock())
+    backend.user_data_bucket = bucket
+
+    # Set up the mock data for get_user_data
+    user_json = {'uploaded_wiki': ['page1.html'], 'uploaded_image': []}
+    with patch.object(backend, 'get_user_data', return_value=user_json):
+        # Call the upload_file_registry method
+        backend.upload_file_registry('test_user')
+
+    with open('test_user-data.json') as f:
+        uploaded_json = json.load(f)
+
+    # check to see json is matching
+    assert uploaded_json == {
+        'uploaded_image': [],
+        'uploaded_wiki': ['page1.html']
+    }
