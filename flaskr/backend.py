@@ -1,8 +1,8 @@
-# TODO(Project 1): Implement Backend according to the requirements.
 from google.cloud import storage
 import hashlib
 from io import BytesIO
 import os
+
 import json
 """Backend class for the `Vacapedia` platform
 
@@ -189,17 +189,60 @@ class Backend:
 
         return bytes_io(content_byte)
 
-    """Query user data from the Google cloud storage
-    
-    Query user data from the Google cloud storage, if the user doesn't exist in the username-data bucket raise Exception "User doesn't exist"
+    def delete_user_uploads(self, curr_user):
+        """Move a user's uploads to a Deleted_Users file and delete the original folder.
 
-    Args:
-        username:
-            The desired user's data to return
+            Args:
+                curr_user:
+                     Username of the user whose uploads will be deleted.
+        """
+        blobs = self.bucket_content.list_blobs(prefix=f'{curr_user}/')
 
-    """
+        if blobs:
+            for blob in blobs:
+                # gets original filename
+                original_filename = os.path.basename(blob.name)
+
+                # create the name of deleted blob
+                deleted_blob_name = f'Deleted_Users/{original_filename}'
+                deleted_blob = self.bucket_content.blob(deleted_blob_name)
+
+                # Copy original contents to deleted blob
+                original_content = blob.download_as_string()
+                deleted_blob.upload_from_string(original_content)
+
+                # delete original
+                blob.delete()
+
+    def delete_user(self, curr_user):
+        """Deletes a User and password content from the Bucket
+
+            Args:
+                curr_user:
+                     Username of the user who will be deleted.
+
+            Returns:
+                True if the user was deleted, False otherwise.
+        """
+        user_blob = self.bucket_user_password.blob(curr_user)
+
+        if user_blob.exists(self.storage_client):
+            # Delete the user's password from the user_password bucket
+            user_blob.delete()
+            return True
+        else:
+            return False
 
     def get_user_data(self, username):
+        """Query user data from the Google cloud storage
+    
+        Query user data from the Google cloud storage, if the user doesn't exist in the username-data bucket raise Exception "User doesn't exist"
+
+        Args:
+            username:
+                The desired user's data to return
+
+        """
         data_blob = self.user_data_bucket.get_blob(username)
         if not data_blob:
             return {'username': username}
