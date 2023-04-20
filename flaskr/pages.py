@@ -129,7 +129,9 @@ def make_endpoints(app):
             if 'file' not in request.files:
                 flash('No File Input')
                 return redirect(url_for('upload'))
-            elif request.files['file'].content_type == "text/html" and not current_user.is_admin():
+            elif request.files[
+                    'file'].content_type == "text/html" and not current_user.is_admin(
+                    ):
                 flash('No admin privileges')
                 print(current_user.role)
                 return redirect(url_for('upload'))
@@ -161,7 +163,8 @@ def make_endpoints(app):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
         if request.method == 'GET':
-            return redirect(url_for('profile_view', username=current_user.username))
+            return redirect(
+                url_for('profile_view', username=current_user.username))
         else:
             # Get the form data
             name = request.form.get('name')
@@ -176,7 +179,7 @@ def make_endpoints(app):
             return redirect(
                 url_for('profile_view', username=current_user.username))
         return 'Form not submitted successfully'
- 
+
     @app.route('/template', methods=['GET'])
     def template():
         return render_template('boqueron-beach.html')

@@ -268,7 +268,7 @@ class Backend:
         self.upload_user_profile_picture(username, "profile_pic", image)
 
         return True
-    
+
     def assign_admin(self, username):
 
         data_blob = self.user_data_bucket.get_blob(username)
@@ -288,7 +288,4 @@ class Backend:
         new_data_json = json.dumps(data).encode('utf-8')
         data_blob.upload_from_string(new_data_json)
 
-
-
         return True
-
