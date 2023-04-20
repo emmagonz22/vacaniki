@@ -4,7 +4,6 @@ from io import BytesIO
 import os
 
 import json
-
 """Backend class for the `Vacapedia` platform
 
 Backend class for the `Vacapedia` platform, this class can add, verify if 
@@ -233,7 +232,7 @@ class Backend:
             return True
         else:
             return False
-            
+
     def get_user_data(self, username):
         """Query user data from the Google cloud storage
     

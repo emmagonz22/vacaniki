@@ -146,7 +146,7 @@ def make_endpoints(app):
             redirect(url_for('home'))
 
         return redirect(url_for('home'))
-        
+
     @app.route('/<username>', methods=['GET', 'POST'])
     def profile_view(username):
         '''Returns upload page'''
@@ -155,4 +155,3 @@ def make_endpoints(app):
         else:
             #When post update Profile view
             return render_template('profile_view.html')
-

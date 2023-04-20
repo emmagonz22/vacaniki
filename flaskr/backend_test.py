@@ -166,7 +166,6 @@ def test_get_image_success():
     assert result.getvalue() == b"image_data"
 
 
-
 def test_delete_user_uploads():
     storage_client = MagicMock()
     backend = Backend(storage_client)
@@ -210,6 +209,7 @@ def test_delete_user():
     # Check that the delete user returns True
     result = backend.delete_user(curr_user)
     assert result is True
+
 
 def test_get_user_data():
     # Test for an existing user
