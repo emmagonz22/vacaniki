@@ -268,3 +268,27 @@ class Backend:
         self.upload_user_profile_picture(username, "profile_pic", image)
 
         return True
+    
+    def assign_admin(self, username):
+
+        data_blob = self.user_data_bucket.get_blob(username)
+        if not data_blob:
+            # username doesn't exist
+            return False
+
+        # download json as string
+        blob_content = data_blob.download_as_string()
+
+        # convert to dictionary
+        data = json.loads(blob_content)
+
+        data['role'] = 1
+
+        #Convert to json
+        new_data_json = json.dumps(data).encode('utf-8')
+        data_blob.upload_from_string(new_data_json)
+
+
+
+        return True
+
