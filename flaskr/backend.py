@@ -272,7 +272,6 @@ class Backend:
         #print(json.loads(data))
         return json.loads(data)
 
-
     def edit_user(self, username, name, description, image):
         """Modify user data from GCS
     
@@ -377,4 +376,3 @@ class Backend:
         # upload json content back into the content
         blob = self.user_data_bucket.blob(f"{username}")
         blob.upload_from_filename(json_file_name)
-
