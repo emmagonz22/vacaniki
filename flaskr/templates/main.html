@@ -9,6 +9,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <script>
+    /*Flash animation to display message*/
+    document.addEventListener('DOMContentLoaded', function() {
+    const flashElements = document.querySelectorAll('.flash');
+
+    flashElements.forEach((element) => {
+        setTimeout(() => {
+            element.style.opacity = '0';
+            setTimeout(() => {
+                element.remove();
+            }, 1000);
+        }, 3000);
+    });
+});
+  </script>
 {% endblock head %}
 
 {% block navbar %}
@@ -47,7 +63,7 @@
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="status" role="alert">
-                <ul style="padding: 0;">
+                <ul class="flash show" style="padding: 0; display: flex; justify-content: center;  list-style-type: none;">
                     {% for message in messages %}
                         <li>{{ message }}</li>
                     {% endfor %}

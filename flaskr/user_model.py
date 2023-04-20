@@ -46,4 +46,4 @@ class User(UserMixin):
         #, Full name: {self.first_name} {self.second_name}, Description {self.description}"
 
     def is_admin(self):
-        return self.role == Role.ADMIN
+        return self.role == 1

@@ -7,6 +7,7 @@ nav {
     border: thick solid;
     box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
     max-height: 60px;
+    
 }
 .nav-li {
     list-style-type: none;
@@ -54,4 +55,31 @@ nav {
     font-family: 'Open Sans', sans-serif;
 }
 
-/*Tutorial for toast design https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_snackbar*/
+
+.flash{
+    -webkit-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+    background-color: rgba(106, 204, 106, 0.497);
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 4px; 
+    position: fixed; 
+    min-width: 280px; 
+    min-height: 30px; 
+    margin-left: -125px; 
+    text-align: center; 
+    z-index: 1; 
+    left: 50%; 
+    color: black;
+    bottom: 30px; 
+    display: flex;         
+    justify-content: center; 
+    align-items: center;     
+    border-bottom: 2px solid black; 
+    border-right: 2px solid black; 
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+    opacity: 1; 
+    transition: opacity 1s; 
+}
+  

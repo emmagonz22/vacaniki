@@ -47,7 +47,7 @@ def make_endpoints(app):
     def all_pages():
         """Returns all of the pages from `get_all_page_names()` method."""
         return render_template("pages.html",
-                               page_name="Vactionwiki Index",
+                               page_name="Vactioniki Index",
                                all_pages=backend.get_all_page_names())
 
     @app.route("/pages/<name>")
@@ -131,6 +131,7 @@ def make_endpoints(app):
                 return redirect(url_for('upload'))
             elif request.files['file'].content_type == "text/html" and not current_user.is_admin():
                 flash('No admin privileges')
+                print(current_user.role)
                 return redirect(url_for('upload'))
 
             #grab wikipage name and file content
@@ -178,4 +179,4 @@ def make_endpoints(app):
  
     @app.route('/template', methods=['GET'])
     def template():
-        return render_template('article-template.html')
+        return render_template('boqueron-beach.html')

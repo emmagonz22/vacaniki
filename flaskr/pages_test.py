@@ -38,7 +38,7 @@ def test_all_pages(client):
                return_value=["Canada.txt", "California.txt"]):
         resp = client.get("/pages")
         assert resp.status_code == 200
-        assert b"Vactionwiki Index" in resp.data
+        assert b"Vactioniki Index" in resp.data
 
 
 @patch("flaskr.backend.Backend.get_wiki_page", return_value=b"test.")
