@@ -26,11 +26,11 @@ def make_endpoints(app):
         """Returns about page."""
         return render_template('about.html')
 
-    @app.route("/images/<img_blob_name>")
+    @app.route("/images/<path:img_blob_name>")
     def images(img_blob_name):
         """Returns image from from `get_image()` method."""
         #return img_blob_name
-        if current_user.is_authenticated and img_blob_name == "profile_pic":
+        if img_blob_name == "profile_pic":
             img = backend.get_image(img_blob_name, prefix=current_user.username)
         else:
             img = backend.get_image(img_blob_name)
@@ -53,9 +53,9 @@ def make_endpoints(app):
     @app.route("/pages/<path:name>")
     def page(name):
         """Returns the page from `get_wiki_page()` method."""
-
+       
         wiki_page = backend.get_wiki_page(name)
-        print("wikipage", wiki_page)
+     
         return render_template_string(
             wiki_page,
             page_name=name,
