@@ -361,6 +361,3 @@ class Backend:
         # upload json content back into the content
         blob = self.user_data_bucket.blob(f"{username}")
         blob.upload_from_filename(json_file_name)
-
-bk=Backend()
-print(bk.get_image("emmaadmin/BoqueronBeach"))
