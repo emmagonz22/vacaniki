@@ -1,1 +1,1 @@
-{"username": "test_user", "name": "", "email": "", "uploaded_wiki": [], "uploaded_image": [], "created_at": "", "description": "", "profile_photo": false}
+{"uploaded_wiki": ["page1.html"], "uploaded_image": []}

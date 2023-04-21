@@ -36,9 +36,9 @@ class Backend:
             Wikipage with designated name.
 
         """
-       
+
         wiki_blob = self.bucket_content.blob(f"{name}")
-    
+
         wiki_blob = self.bucket_content.blob(name)
 
         if wiki_blob.exists(self.storage_client):
@@ -61,7 +61,7 @@ class Backend:
         """
         content_blobs = self.storage_client.list_blobs(self.bucket_content.name)
         page_list = []
-        
+
         for blob in content_blobs:
             if blob.content_type == "text/html":
                 page_list.append(blob.name)
