@@ -290,7 +290,7 @@ class Backend:
         data_blob.upload_from_string(new_data_json)
 
         #Upload image
-        self.upload_user_profile_picture(username, "profile_pic", image)
+        self.upload(username, "profile_pic", image)
 
         return True
 
