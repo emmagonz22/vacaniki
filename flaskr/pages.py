@@ -50,10 +50,12 @@ def make_endpoints(app):
                                page_name="Vactioniki Index",
                                all_pages=backend.get_all_page_names())
 
-    @app.route("/pages/<name>")
+    @app.route("/pages/<path:name>")
     def page(name):
         """Returns the page from `get_wiki_page()` method."""
+
         wiki_page = backend.get_wiki_page(name)
+        print("wikipage", wiki_page)
         return render_template_string(
             wiki_page,
             page_name=name,
