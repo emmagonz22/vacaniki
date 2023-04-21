@@ -1,0 +1,215 @@
+{% extends 'main.html' %}
+
+{% block head %}
+    {{super()}}
+	<title>Wiki article template</title>
+
+	<style>
+	.article-body {
+
+		background-color: #f9f9f9;
+		font-family: 'Open Sans', sans-serif;
+	}
+
+	#content-wrapper {
+		max-width: 1100px;
+		margin: 20px auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+
+	#content {
+		flex-grow: 1;
+		flex-basis: 0;
+		padding: 20px;
+		background-color: #fff;
+		box-shadow: 0 0 5px #ccc;
+		border-radius: 5px;
+		margin-right: 20px;
+		box-sizing: border-box;
+	}
+
+	.article-h1 {
+		font-size: 30px;
+		margin-top: 0;
+		margin-bottom: 10px;
+		font-family: 'Open Sans', sans-serif;
+		color:  rgba(0, 0, 255, .6);
+	}
+
+	.article-h2 {
+		font-size: 24px;
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-family: 'Open Sans', sans-serif;
+		color:  rgba(0, 0, 255, .6);
+	}
+
+	.article-p {
+		margin: 10px 0;
+		text-align: justify;
+		text-justify: inter-word;
+	}
+
+	.article-ul, .article-ol {
+		margin: 10px 0;
+		padding-left: 20px;
+	}
+
+	.article-ul .article-li, .article-ol .article-li {
+		margin: 5px 0;
+	}
+
+	.article-blockquote {
+		margin: 10px 0;
+		padding: 10px;
+		background-color: #f2f2f2;
+		border-left: 4px solid #ccc;
+	}
+
+	.article-table {
+		border-collapse: collapse;
+		width: 100%;
+		margin: 20px 0;
+	}
+
+	.article-th, .article-td {
+		border: 1px solid #ccc;
+		padding: 10px;
+	}
+
+	.article-th {
+		background-color: #f2f2f2;
+	}
+
+	.image {
+		margin: 20px 0;
+		text-align: center;
+	}
+
+	.image img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	.reference {
+		margin: 20px 0;
+	}
+
+	.reference .article-a {
+		text-decoration: none;
+	}
+
+	.reference .article-a:hover {
+		text-decoration: underline;
+	}
+
+	#info-box {
+		flex-basis: 320px;
+		background-color: #f2f2f2;
+		padding: 20px;
+		border-radius: 5px;
+		box-shadow: 0 0 5px #ccc;
+		box-sizing: border-box;
+
+		font-family: 'Open Sans', sans-serif;
+	}
+
+	#info-box .article-h3 {
+		font-size: 18px;
+		margin-top: 0;
+		margin-bottom: 10px;
+		color:  rgba(0, 0, 255, .6);
+		display: flex;
+		justify-content: center;
+	}
+	#author{
+		color:  rgba(0, 0, 255, .6);
+		text-align: center;
+	}
+	#info-box .article-ul {
+		margin: 0;
+		padding-left: 20px;
+	}
+	#info-box .article-ul .article-li {
+		margin: 5px 0;
+	}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<body class="article-body">
+	<div id="content-wrapper">
+		<div id="content">
+			<h1 class="article-h1">Article Title</h1>
+			<p class="article-p">Article content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere turpis quis velit aliquet, a malesuada massa vehicula. Sed sed tellus vitae nisi bibendum aliquam eget in erat. Sed volutpat metus eu arcu maximus, sit amet dignissim nibh efficitur.</p>
+			<h2 class="article-h2">Section Title</h2>
+			<p class="article-p">Section content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere turpis quis velit aliquet, a malesuada massa vehicula. Sed sed tellus vitae nisi bibendum aliquam eget in erat. Sed volutpat metus eu arcu maximus, sit amet dignissim nibh efficitur.</p>
+			<ul class="article-ul">
+				<li class="article-li">List item 1</li>
+				<li class="article-li">List item 2</li>
+				<li class="article-li">List item 3</li>
+			</ul>
+			<ol class="article-ol">
+				<li class="article-li">Ordered item 1</li>
+				<li class="article-li">Ordered item 2</li>
+				<li class="article-li">Ordered item 3</li>
+			</ol>
+			<blockquote class="article-blockquote">
+				<p class="article-p">"This is a quote. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent posuere turpis quis velit aliquet."</p>
+			</blockquote>
+		
+			<div class="image">
+				<img src="https://via.placeholder.com/500x300" alt="Image caption">
+				<p style="text-align: center;">Image caption goes here</p>
+			</div>
+
+			<table class="article-table">
+				<thead>
+					<tr class="article-tr">
+						<th class="article-th">Table Header 1</th>
+						<th class="article-th">Table Header 2</th>
+						<th class="article-th">Table Header 3</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="article-tr">
+						<td class="article-td">Table cell 1</td>
+						<td class="article-td">Table cell 2</td>
+						<td class="article-td">Table cell 3</td>
+					</tr>
+					<tr class="article-tr">
+						<td class="article-td">Table cell 4</td>
+						<td class="article-td">Table cell 5</td>
+						<td class="article-td">Table cell 6</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="reference">
+				<p>Reference: <a href="#">https://example.com</a></p>
+			</div>
+			Feel free to remove any element from this template
+		</div>
+		<div id="info-box">
+			<h3 class="article-h3">Location</h3>
+			<div class="image">
+				<img src="https://via.placeholder.com/300x200" alt="Flag">
+				<p class="article-p" style="text-align: center;">Country Flag</p>
+			</div>			
+			<ul class="article-ul">
+				<li class="article-li">Info box item 1</li>
+				<li class="article-li">Info box item 2</li>
+				<li class="article-li">Info box item 3</li>
+			</ul>
+			<!--The author is going to be replaced when uploading the wikipage-->
+			<h4 class="article-h4">Author</h4> 
+			<h4 class="article-h4" id="author"><a href="#" style="text-decoration: none;">Author's username</a></h3>
+			
+		</div>
+		
+	</div>
+
+</body>
+{% endblock %}
