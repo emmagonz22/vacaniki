@@ -63,29 +63,10 @@ class Backend:
                 page_list.append(blob.name)
         return page_list
 
-    def upload(self, content_name,
+    def upload(self, username, content_name,
                content):  #Add content to the content-bucket (a blob object)
         """Upload content to the GCS content bucket.
 
-        Upload content to the GCS content bucket if the data already exist is going to overwrite the content.
-
-        Args:
-            content_name:
-                Name of the content that is going to be uploaded.
-            content:
-                File that is going to be uploaded (Images [png, jpeg, etc], html file, css file, etc)
-        
-        """
-
-        new_blob = self.bucket_content.blob(content_name)
-        new_blob.upload_from_file(content, content_type=content.content_type)
-
-    def upload_user_profile_picture(
-            self, username, content_name,
-            content):  #Add content to the content-bucket (a blob object)
-        """Upload content to the GCS content bucket.
-
-     
         Upload content to the GCS content bucket in prefix named given username and if the data already exist is going to overwrite the content.
 
         Args: 

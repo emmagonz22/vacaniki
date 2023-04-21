@@ -143,7 +143,7 @@ def make_endpoints(app):
                 flash('No selected file')
                 return redirect(url_for('upload'))
             if file:
-                backend.upload(wikipage, file)
+                backend.upload(current_user.username, wikipage, file)
                 flash('File uploaded successfully')
                 return redirect(url_for('upload'))
 
