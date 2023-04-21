@@ -235,7 +235,8 @@ def test_get_user_data():
         'uploaded_wiki': ['CuevasdeCamuy.html'],
         'uploaded_image': ['CuevasdeCammuyentrance.png'],
         'created_at': '4-12-2023',
-        'description': 'Like to travel'
+        'description': 'Like to travel',
+        'profile_photo': False
     }
 
     # Create a mock GCS bucket and blob

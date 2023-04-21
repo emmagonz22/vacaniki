@@ -114,7 +114,8 @@ class Backend:
                 'uploaded_wiki': [],
                 'uploaded_image': [],
                 'created_at': '',
-                'description': ''
+                'description': '',
+                'profile_photo': False
             }
             blob = self.user_data_bucket.blob(f"{username}")
 
@@ -154,7 +155,7 @@ class Backend:
 
         return False
 
-    def get_image(self, name: str, bytes_io=BytesIO):
+    def get_image(self, name: str, prefix="", bytes_io=BytesIO):
         """Query image from the GCS's content bucket.
 
         Query image from the GCS's content bucket.
@@ -167,8 +168,25 @@ class Backend:
             Image data from the blob with name of the parameter 'name'
 
         """
+        if prefix == "":
+            image_blob = self.bucket_content.get_blob(name)
+        else:
+            blobs = self.storage_client.list_blobs(self.bucket_content.name,
+                                                   prefix=prefix)
+            #blobs = self.bucket_content.list_blobs(prefix=prefix)
 
-        image_blob = self.bucket_content.get_blob(name)
+            for blob in blobs:
+                if blob.name.endswith(name):
+                    print(blob.name, name)
+                    image_blob = blob
+                    break
+            else:
+                # The loop completed without finding the blob, so raise an error
+                raise ValueError(
+                    f"No blob found with prefix/name {prefix}/{name}")
+
+        if image_blob is None:
+            raise ValueError(f"No blob found with prefix/name {prefix}/{name}")
 
         content_byte = image_blob.download_as_bytes()
 
@@ -232,8 +250,70 @@ class Backend:
         if not data_blob:
             return {'username': username}
         data = data_blob.download_as_text()
-        print(json.loads(data))
+        #print(json.loads(data))
         return json.loads(data)
+
+    def edit_user(self, username, name, description, image):
+        """Modify user data from GCS
+    
+        Get user with given username and replace is name, description and profile picture.
+
+        Args:
+            username:
+                The desired user's data to edit
+            name:
+                New name (string) for the deserid user
+            description:
+                New description (string) for the user
+            image:
+                New profile picture for the user
+        Returns:
+            True if user is modified and False if blob is not found.
+        """
+
+        data_blob = self.user_data_bucket.get_blob(username)
+        if not data_blob:
+            return False
+
+    # download json as string
+        blob_content = data_blob.download_as_string()
+
+        # convert to dictionary
+        data = json.loads(blob_content)
+
+        data['name'] = name
+        data['description'] = description
+        data['profile_photo'] = True
+
+        #COnvert to json
+        new_data_json = json.dumps(data).encode('utf-8')
+        data_blob.upload_from_string(new_data_json)
+
+        #Upload image
+        self.upload_user_profile_picture(username, "profile_pic", image)
+
+        return True
+
+    def assign_admin(self, username):
+
+        data_blob = self.user_data_bucket.get_blob(username)
+        if not data_blob:
+            # username doesn't exist
+            return False
+
+        # download json as string
+        blob_content = data_blob.download_as_string()
+
+        # convert to dictionary
+        data = json.loads(blob_content)
+
+        data['role'] = 1
+
+        #Convert to json
+        new_data_json = json.dumps(data).encode('utf-8')
+        data_blob.upload_from_string(new_data_json)
+
+        return True
 
     def upload_file_registry(self, username):
         ''' Upload user file registry onto their json profile-data file
