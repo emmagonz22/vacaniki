@@ -5,16 +5,23 @@
     <title>{{ page_name }}</title>
     <style>
         .page-index-li{
-            list-style-type: square;
+            list-style-type: none;
         }
-        ul{
-            display:  flex;
+        .page-ul{
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            padding: 0 !important;
+        }
+        .page-li{
+            font-family: 'Ariel', sans-serif;
+            display: flex;
+            justify-content: start;
+        }
+        .container{
+            display: flex;
             justify-content: center;
         }
-        li{
-            font-family: 'Open Sans', sans-serif;
-        }
-
                 
 
     </style>
@@ -23,10 +30,18 @@
 {% block content %}
 
 <body>
-    <ul>
+    <div class="container">
+    <ul class="page-ul">
     {% for page in all_pages %}
-        <li class="page-index-li"><a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
+        {% if loop.index < all_pages|length %}
+            <li class="page-index-li page-li">├─<a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
+        {% else %}
+            <li class="page-index-li page-li">└─ <a href="{{ url_for('page', name=page) }}">{{ page }}</a></li>
+        {% endif %}
+
+        
     {% endfor %}
+    </div>
     </ul>
 </body>
 {% endblock %}
