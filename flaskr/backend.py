@@ -2,7 +2,7 @@ from google.cloud import storage
 import hashlib
 from io import BytesIO
 import os
-
+import tempfile
 import json
 """Backend class for the `Vacapedia` platform
 
@@ -121,6 +121,7 @@ class Backend:
                 'description': '',
                 'profile_photo': False
             }
+            """
             blob = self.user_data_bucket.blob(f"{username}")
 
             json_file_name = f'{username}-data.json'
@@ -130,6 +131,19 @@ class Backend:
             with new_user_blob.open("w") as new_user:
                 new_user.write(hash_password)
                 return True
+            
+            """
+            with tempfile.NamedTemporaryFile(mode='w',
+                                             delete=False) as temp_file:
+                json.dump(user_data, temp_file)
+                temp_file.flush()
+                blob = self.user_data_bucket.blob(f"{username}")
+                blob.upload_from_filename(temp_file.name)
+
+            with new_user_blob.open("w") as new_user:
+                new_user.write(hash_password)
+                return True
+
         else:
             print(f"User {username} already exist")
             return False
