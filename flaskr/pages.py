@@ -30,10 +30,21 @@ def make_endpoints(app):
     def images(img_blob_name):
         """Returns image from from `get_image()` method."""
         #return img_blob_name
-        if img_blob_name == "profile_pic":
-            img = backend.get_image(img_blob_name, prefix=current_user.username)
+        img = backend.get_image(img_blob_name)
+
+        if img_blob_name.endswith('.jpeg') or img_blob_name.endswith('.jpg'):
+            mimetype = 'image/jpeg'
         else:
-            img = backend.get_image(img_blob_name)
+            mimetype = 'image/png'
+
+        print("Loading image with mime: ", mimetype, img)
+        return send_file(img, mimetype=mimetype)
+
+    @app.route("/images/<path:username>/<path:img_blob_name>")
+    def images_username(img_blob_name, username):
+        """Returns image from from `get_image()` method."""
+
+        img = backend.get_image(img_blob_name, prefix=username)
 
         if img_blob_name.endswith('.jpeg') or img_blob_name.endswith('.jpg'):
             mimetype = 'image/jpeg'
@@ -167,9 +178,10 @@ def make_endpoints(app):
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
         if current_user.is_authenticated:
-            username = current_user.username
-            user_data = backend.get_user_data(current_user.username)
-            return render_template('profile_view.html', user_data=user_data)
+            user_data = backend.get_user_data(username)
+            return render_template('profile_view.html',
+                                   user_data=user_data,
+                                   username=username)
         else:
             return redirect(url_for('login'))
 

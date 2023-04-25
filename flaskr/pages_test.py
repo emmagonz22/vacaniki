@@ -59,6 +59,15 @@ def test_get_image(mock_get_image, client):
     mock_get_image.assert_called_once_with(image_name)
 
 
+@patch("flaskr.backend.Backend.get_image", return_value=BytesIO())
+def test_get_image_username(mock_get_image, client):
+
+    image_name = "img"
+    resp = client.get("/images/img")
+    assert resp.status_code == 200
+    mock_get_image.assert_called_once_with(image_name)
+
+
 '''Unit testing for user sessions'''
 
 
