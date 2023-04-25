@@ -18,13 +18,13 @@
     <div class="user">
         <div class="profile-photo">
 
-            {% if user_data.get("profile_photo") == True and url_for('images', img_blob_name=current_user.username+'/profile_pic')  %}
+            {% if user_data.get("profile_photo") == True and url_for('images', img_blob_name=user_data.username+'/profile_pic')  %}
 
-                <img src="{{ url_for('images', img_blob_name='profile_pic', username=current_user.username) }}" alt="{{current_user.username}}">
+                <img src="{{ url_for('images', img_blob_name='profile_pic', username=user_data.username) }}" alt="{{user_data.username}}">
 
             {% else %}
     
-                <img src="{{ url_for('static', filename='default_user_pic.png') }}" alt="{{current_user.username}}">
+                <img src="{{ url_for('static', filename='default_user_pic.png') }}" alt="{{user_data.username}}">
 
             {% endif %}
         </div>
@@ -86,6 +86,7 @@
                 {% endif %}
             </div>
         </div>
+        {% if current_user.username == user_data.username %}
         <div class="user-buttons">
 
             <button class="edit-btn open-modal">Edit</button>
@@ -93,6 +94,7 @@
             <a href="{{ url_for('delete_user') }}"><button class="delete-btn">Delete</button></a>
 
         </div>
+        {% endif %}
         
     </div>
 </div>

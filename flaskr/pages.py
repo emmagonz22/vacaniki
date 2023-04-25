@@ -167,9 +167,10 @@ def make_endpoints(app):
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
         if current_user.is_authenticated:
-            username = current_user.username
-            user_data = backend.get_user_data(current_user.username)
-            return render_template('profile_view.html', user_data=user_data)
+            user_data = backend.get_user_data(username)
+            return render_template('profile_view.html',
+                                   user_data=user_data,
+                                   username=username)
         else:
             return redirect(url_for('login'))
 
