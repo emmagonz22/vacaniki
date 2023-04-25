@@ -118,7 +118,7 @@ def test_get_all_page_names_empty():
 
 
 def test_upload():
-    mock_storage = MagicMock()
+    mock_storage = Mock()
     backend = Backend(mock_storage)
 
     # Prepare test data
@@ -133,13 +133,37 @@ def test_upload():
     mock_blob.return_value = b'test data'
     backend.bucket_content.blob.return_value = mock_blob
 
-    # Call upload method
-    backend.upload(username, content_name, content)
-    backend.bucket_content.blob.return_value = mock_blob
+    mock_user_data = {
+        'username': username,
+        'name': '',
+        'email': '',
+        'uploaded_wiki': [],
+        'uploaded_image': [],
+        'created_at': '',
+        'description': '',
+        'profile_photo': False
+    }
+    mock_json = MagicMock()
+    mock_json.loads.return_value = mock_user_data
 
-    backend.bucket_content.blob.assert_called_with(f'{username}/{content_name}')
-    mock_blob.upload_from_file.assert_called_with(
-        content, content_type=content.content_type)
+    with patch('json.dumps', mock_json.dumps), patch(
+            'json.loads', mock_json.loads), patch.object(
+                Backend, 'upload_file_registry') as mock_upload_file_registry:
+        backend.upload(username, content_name, content)
+
+        backend.bucket_content.blob.assert_called_with(
+            f'{username}/{content_name}')
+        mock_blob.upload_from_file.assert_called_with(
+            content, content_type=content.content_type)
+        mock_upload_file_registry.assert_called_with(username)
+
+        expected_json = json.dumps(mock_user_data)
+        mock_json.dumps.assert_called_once_with(mock_user_data)
+    #mock_data_blob = MagicMock()
+    #mock_data_blob.download_as_string.return_value = json.dumps(mock_user_data)
+    #backend.user_data_bucket.get_blob.return_value = mock_data_blob
+
+    #call upload method
 
 
 def test_get_image_failure():

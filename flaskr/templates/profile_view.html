@@ -55,9 +55,9 @@
            
             <div class="files-text">
                 {% if user_data.get("uploaded_image")  %}
-                    <ul>
+                    <ul class="ul-box">
                         {% for file in user_data.get("uploaded_image") %}
-                            <li>{{ file }}</li>
+                            <li style="list-style: none;">{{ file }}</li>
                         {% endfor %}
                     </ul>
                 {% else %}
@@ -74,9 +74,9 @@
            
             <div class="files-text">
                 {% if user_data.get("uploaded_wiki")  %}
-                <ul>
+                <ul class="ul-box">
                     {% for wiki in user_data.get("uploaded_wiki") %}
-                        <li>{{ wiki }}</li>
+                        <li style="list-style: none;">{{ wiki }}</li>
                     {% endfor %}
                 </ul>
                 {% else %}
@@ -139,6 +139,10 @@ img {
     width: 260px;
     height: 260px; 
     object-fit: fill;
+}
+.ul-box {
+    margin: 3px;
+    padding: 0px;
 }
 .user{
     font-family: 'Open Sans', sans-serif;
@@ -281,7 +285,7 @@ p {
 }
 .show-modal {
     opacity: 1;
-    visibility: visible;
+    visibility: visible; 
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }

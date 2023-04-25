@@ -82,10 +82,10 @@ class Backend:
                 File that is going to be uploaded (Images [png, jpeg, etc], html file, css file, etc)
         
         """
-
         new_page_blob = self.bucket_content.blob(f"{username}/{content_name}")
         new_page_blob.upload_from_file(content,
                                        content_type=content.content_type)
+        self.upload_file_registry(username)
 
     def sign_up(self, username: str, password: str):
         """Create new account in the GCS's user-password bucket.
@@ -121,24 +121,13 @@ class Backend:
                 'description': '',
                 'profile_photo': False
             }
-            """
-            blob = self.user_data_bucket.blob(f"{username}")
 
-            json_file_name = f'{username}-data.json'
-            with open(json_file_name, 'w') as f:
-                json.dump(user_data, f)
-            blob.upload_from_filename(json_file_name)
-            with new_user_blob.open("w") as new_user:
-                new_user.write(hash_password)
-                return True
-            
-            """
             with tempfile.NamedTemporaryFile(mode='w',
                                              delete=False) as temp_file:
                 json.dump(user_data, temp_file)
                 temp_file.flush()
                 blob = self.user_data_bucket.blob(f"{username}")
-                blob.upload_from_filename(temp_file.name)
+                blob.upload_from_filename(f'{username}-data.json')
 
             with new_user_blob.open("w") as new_user:
                 new_user.write(hash_password)
@@ -367,11 +356,5 @@ class Backend:
         user_json["uploaded_wiki"] = wiki_pages
         user_json["uploaded_image"] = images
 
-        # adds json back into the json file
-        json_file_name = f'{username}-data.json'
-        with open(json_file_name, 'w') as f:
-            json.dump(user_json, f)
-
-        # upload json content back into the content
         blob = self.user_data_bucket.blob(f"{username}")
-        blob.upload_from_filename(json_file_name)
+        blob.upload_from_string(json.dumps(user_json))
