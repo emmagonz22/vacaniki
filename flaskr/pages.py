@@ -174,7 +174,6 @@ def make_endpoints(app):
 
         return redirect(url_for('home'))
 
-    @login_required
     @app.route('/profile/<username>', methods=['GET', 'POST'])
     def profile_view(username):
         if current_user.is_authenticated:
