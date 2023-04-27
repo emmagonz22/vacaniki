@@ -222,19 +222,12 @@ class Backend:
                 if blob.content_type == "text/html":
                     deleted_blob.content_type = "text/html"
 
-                # Download original contents to local file
-                local_filename = 'temp_file'
-                blob.download_to_filename(local_filename)
-
-                # Upload local file contents to deleted blob
-                with open(local_filename, 'rb') as f:
-                    deleted_blob.upload_from_file(f)
+                # Upload original contents to deleted blob
+                blob_bytes = BytesIO(blob.download_as_bytes())
+                deleted_blob.upload_from_file(blob_bytes)
 
                 # delete original blob
                 blob.delete()
-
-                # delete local file
-                os.remove(local_filename)
 
     def delete_user(self, curr_user):
         """Deletes a User and password content from the Bucket
