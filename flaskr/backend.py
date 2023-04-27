@@ -245,6 +245,25 @@ class Backend:
         else:
             return False
 
+    def delete_user_json(self, curr_user):
+        """Deletes a User data json from the bucket
+
+            Args:
+                curr_user:
+                     Username of the user who will be deleted.
+
+            Returns:
+                True if the user data was deleted, False otherwise.
+        """
+        user_blob = self.user_data_bucket.blob(curr_user)
+
+        if user_blob.exists(self.storage_client):
+            # Delete User json from bucket
+            user_blob.delete()
+            return True
+        else:
+            return False
+
     def get_user_data(self, username):
         """Query user data from the Google cloud storage
     

@@ -164,6 +164,7 @@ def make_endpoints(app):
     def delete_user():
         backend.delete_user_uploads(current_user.username)
         success_user = backend.delete_user(current_user.username)
+        backend.delete_user_json(current_user.username)
         if success_user:  # checks if the user deletion was successful
             logout_user()
             flash('Successfully deleted user')
